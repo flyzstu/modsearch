@@ -101,6 +101,8 @@ const SUMMARY = {
       keySource: null,
       enabled: true,
     },
+    ollama: { baseURL: '', model: '', hasKey: false, keySource: null, enabled: true },
+    brave: { baseURL: '', model: '', hasKey: false, keySource: null, enabled: true },
     tavily: {
       baseURL: 'https://a.example',
       model: '',
@@ -113,7 +115,7 @@ const SUMMARY = {
     'grok-cli': { baseURL: '', model: '', hasKey: false, keySource: null, enabled: true },
     local: { baseURL: '', model: '', hasKey: false, keySource: null, enabled: true },
   },
-  keyed: ['tavily', 'exa', 'firecrawl'],
+  keyed: ['ollama', 'brave', 'tavily', 'exa', 'firecrawl'],
   models: ['antigravity-cli'],
 };
 
@@ -245,6 +247,8 @@ describe('a save carries only what the save is about', () => {
       model: 'gemini-3-pro',
       enabled: {
         'antigravity-cli': true,
+        ollama: true,
+        brave: true,
         tavily: true,
         exa: false,
         firecrawl: true,
@@ -564,6 +568,8 @@ describe('the automatic engine chain lists what this machine can actually search
     const view = render(SUMMARY);
     expect(view.chain.map((row) => row.label)).toEqual([
       'antigravity-cli',
+      'ollama',
+      'brave',
       'tavily',
       'exa',
       'firecrawl',
@@ -734,6 +740,8 @@ describe('the preference list offers only engines a preference can mean', () => 
     expect(values(render(SUMMARY))).toEqual([
       '',
       'antigravity-cli',
+      'ollama',
+      'brave',
       'tavily',
       'exa',
       'firecrawl',

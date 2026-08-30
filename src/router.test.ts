@@ -72,13 +72,22 @@ describe('engine chains per role', () => {
     ]);
   });
 
-  it('adds exa to the search chain after tavily when an exa key exists', () => {
-    const withKeys = config({ engines: { tavily: { apiKey: 't' }, exa: { apiKey: 'e' } } });
+  it('adds ollama, exa, and brave to the search chain after agy when keys exist', () => {
+    const withKeys = config({
+      engines: {
+        ollama: { apiKey: 'o' },
+        tavily: { apiKey: 't' },
+        exa: { apiKey: 'e' },
+        brave: { apiKey: 'b' },
+      },
+    });
     expect(names(planRole('search', withKeys, undefined, WITH_AGY).chain)).toEqual([
       'firecrawl',
       'antigravity-cli',
+      'ollama',
       'tavily',
       'exa',
+      'brave',
     ]);
   });
 
@@ -94,15 +103,20 @@ describe('engine chains per role', () => {
     ]);
   });
 
-  it('leads the fetch chain with firecrawl, agy next, local as the floor', () => {
-    const keyed = config({ engines: { firecrawl: { apiKey: 'k' } } });
+  it('leads the fetch chain with firecrawl, agy next, ollama if keyed, local as the floor', () => {
+    const keyed = config({ engines: { firecrawl: { apiKey: 'k' }, ollama: { apiKey: 'o' } } });
     expect(names(planRole('fetch', keyed, undefined, WITH_AGY).chain)).toEqual([
       'firecrawl',
       'antigravity-cli',
+      'ollama',
       'local',
     ]);
     // On a bare machine, firecrawl leads and local still floors.
-    expect(names(planRole('fetch', keyed, undefined, BARE).chain)).toEqual(['firecrawl', 'local']);
+    expect(names(planRole('fetch', keyed, undefined, BARE).chain)).toEqual([
+      'firecrawl',
+      'ollama',
+      'local',
+    ]);
   });
 
   it('searches through keyless firecrawl on a bare machine', () => {
@@ -204,6 +218,18 @@ describe('engine chains per role', () => {
     expect(names(planRole('search', pinned, 'antigravity-cli', WITH_AGY).chain)).toEqual([
       'antigravity-cli',
     ]);
+  });
+
+  it('honors brave chosen in the config file or forced with --engine', () => {
+    const pinned = config({ engine: 'brave', engines: { brave: { apiKey: 'b' } } });
+    expect(names(planRole('search', pinned, undefined, WITH_AGY).chain)[0]).toBe('brave');
+    expect(names(planRole('search', pinned, 'brave', WITH_AGY).chain)).toEqual(['brave']);
+  });
+
+  it('honors ollama chosen in the config file or forced with --engine', () => {
+    const pinned = config({ engine: 'ollama', engines: { ollama: { apiKey: 'o' } } });
+    expect(names(planRole('search', pinned, undefined, WITH_AGY).chain)[0]).toBe('ollama');
+    expect(names(planRole('search', pinned, 'ollama', WITH_AGY).chain)).toEqual(['ollama']);
   });
 
   it('ignores a disabled configured preference and explains why', () => {

@@ -1,9 +1,11 @@
 import type { EngineSettings, Role } from '../config.ts';
 import { antigravityCliProvider } from './antigravity.ts';
+import { braveProvider } from './brave.ts';
 import { exaProvider } from './exa.ts';
 import { firecrawlProvider } from './firecrawl.ts';
 import { grokCliProvider } from './grok.ts';
 import { httpFetchProvider } from './httpFetch.ts';
+import { ollamaProvider } from './ollama.ts';
 import { tavilyProvider } from './tavily.ts';
 
 export type RunMode = 'search' | 'fetch';
@@ -82,6 +84,10 @@ const ENGINES: Record<string, SearchEngine> = {
   'antigravity-cli': antigravityCliProvider,
   antigravity: antigravityCliProvider,
   agy: antigravityCliProvider,
+  brave: braveProvider,
+  'brave-search': braveProvider,
+  ollama: ollamaProvider,
+  'ollama-search': ollamaProvider,
   tavily: tavilyProvider,
   exa: exaProvider,
   firecrawl: firecrawlProvider,
@@ -102,13 +108,13 @@ export const ROLE_PREFERENCE: Record<Role, string[]> = {
   // Firecrawl leads: its keyless allowance works on a bare machine with no
   // signup, which is the product's zero-setup promise. agy synthesizes and
   // cites but its weekly quota is small, so it backs Firecrawl up rather than
-  // fronting the chain. Tavily and Exa are keyed backups.
-  search: ['firecrawl', 'antigravity-cli', 'tavily', 'exa'],
+  // fronting the chain. Tavily, Exa, Brave, and Ollama are keyed backups.
+  search: ['firecrawl', 'antigravity-cli', 'ollama', 'tavily', 'exa', 'brave'],
   // Firecrawl runs a cloud browser for JS-heavy pages, keyless by default
   // (opt out with firecrawl.keylessFetch false). agy extracts to a focus. The
   // local needs no setup and returns the page as served, so it stays the
   // default floor unless the user disables it.
-  fetch: ['firecrawl', 'antigravity-cli', 'local'],
+  fetch: ['firecrawl', 'antigravity-cli', 'ollama', 'local'],
   // Only xAI can see inside X.
   social: ['grok-cli'],
 };

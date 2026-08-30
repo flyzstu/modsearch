@@ -88,6 +88,29 @@ describe('doctor: search engines', () => {
     expect(engine(report, 'fetch', 'firecrawl')?.ready).toBe(true);
   });
 
+  it('reports brave ready from an env key and tags the source', () => {
+    const report = runDoctor({
+      config: {},
+      env: { PATH: '/nonexistent', BRAVE_API_KEY: 'k' } as NodeJS.ProcessEnv,
+    });
+    const brave = engine(report, 'search', 'brave');
+    expect(brave?.ready).toBe(true);
+    expect(brave?.keySource).toBe('env');
+  });
+
+  it('reports ollama ready from an env key and tags the source for search and fetch', () => {
+    const report = runDoctor({
+      config: {},
+      env: { PATH: '/nonexistent', OLLAMA_API_KEY: 'k' } as NodeJS.ProcessEnv,
+    });
+    const ollamaSearch = engine(report, 'search', 'ollama');
+    expect(ollamaSearch?.ready).toBe(true);
+    expect(ollamaSearch?.keySource).toBe('env');
+    const ollamaFetch = engine(report, 'fetch', 'ollama');
+    expect(ollamaFetch?.ready).toBe(true);
+    expect(ollamaFetch?.keySource).toBe('env');
+  });
+
   it('gives a copyable fix for a missing key and missing agy', () => {
     const report = runDoctor({ config: {}, env: BARE_ENV });
     // Keyless firecrawl means search always resolves, even on a bare machine.
@@ -95,6 +118,8 @@ describe('doctor: search engines', () => {
     const fc = engine(report, 'search', 'firecrawl');
     expect(fc?.ready).toBe(true);
     expect(fc?.reason).toMatch(/keyless/i);
+    expect(engine(report, 'search', 'ollama')?.fix).toContain('modsearch config set ollama.apiKey');
+    expect(engine(report, 'search', 'brave')?.fix).toContain('modsearch config set brave.apiKey');
     expect(engine(report, 'search', 'tavily')?.fix).toContain('modsearch config set tavily.apiKey');
     expect(engine(report, 'search', 'exa')?.fix).toContain('modsearch config set exa.apiKey');
     expect(engine(report, 'search', 'antigravity-cli')?.fix).toContain('antigravity.google');

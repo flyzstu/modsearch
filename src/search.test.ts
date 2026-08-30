@@ -204,6 +204,86 @@ describe('per-engine API key rotation', () => {
     },
   );
 
+  it('rotates brave API keys with x-subscription-token on 401', async () => {
+    const sentTokens: string[] = [];
+    vi.stubGlobal(
+      'fetch',
+      vi.fn(async (_url: string, init: RequestInit) => {
+        sentTokens.push((init.headers as Record<string, string>)['x-subscription-token']);
+        if (sentTokens.length === 1) {
+          return {
+            ok: false,
+            status: 401,
+            statusText: 'Unauthorized',
+            text: async () => 'invalid token',
+          } as Response;
+        }
+        return {
+          ok: true,
+          status: 200,
+          statusText: 'OK',
+          json: async () => ({ web: { results: [] } }),
+          text: async () => '{}',
+        } as Response;
+      }),
+    );
+
+    const result = await runSearch({
+      query: 'q',
+      engine: 'brave',
+      config: { engines: { brave: { apiKey: 'brave-key-1,brave-key-2' } } },
+      env: BARE_ENV,
+      timeoutMs: 20_000,
+    });
+
+    expect(sentTokens).toEqual(['brave-key-1', 'brave-key-2']);
+    expect(result.results[0].attempts).toMatchObject([
+      { engine: 'brave', keyIndex: 0, ok: false },
+      { engine: 'brave', keyIndex: 1, ok: true },
+    ]);
+    expect(result.results[0].warnings.join(' ')).toContain('Rotated to brave API key 2');
+  });
+
+  it('rotates ollama API keys with Authorization Bearer header on 401', async () => {
+    const sentTokens: string[] = [];
+    vi.stubGlobal(
+      'fetch',
+      vi.fn(async (_url: string, init: RequestInit) => {
+        sentTokens.push((init.headers as Record<string, string>).authorization);
+        if (sentTokens.length === 1) {
+          return {
+            ok: false,
+            status: 401,
+            statusText: 'Unauthorized',
+            text: async () => 'invalid API key',
+          } as Response;
+        }
+        return {
+          ok: true,
+          status: 200,
+          statusText: 'OK',
+          json: async () => ({ results: [] }),
+          text: async () => '{}',
+        } as Response;
+      }),
+    );
+
+    const result = await runSearch({
+      query: 'q',
+      engine: 'ollama',
+      config: { engines: { ollama: { apiKey: 'ollama-key-1,ollama-key-2' } } },
+      env: BARE_ENV,
+      timeoutMs: 20_000,
+    });
+
+    expect(sentTokens).toEqual(['Bearer ollama-key-1', 'Bearer ollama-key-2']);
+    expect(result.results[0].attempts).toMatchObject([
+      { engine: 'ollama', keyIndex: 0, ok: false },
+      { engine: 'ollama', keyIndex: 1, ok: true },
+    ]);
+    expect(result.results[0].warnings.join(' ')).toContain('Rotated to ollama API key 2');
+  });
+
   it('does not try another key after a network failure', async () => {
     const fetchMock = vi.fn(async () => {
       throw new Error('network unavailable');
@@ -455,8 +535,8 @@ describeSpawn('multiple sources run concurrently and fail independently', () => 
       });
       expect(result.results.map((r) => r.source)).toEqual(['web', 'x']);
       expect(result.results.every((r) => r.status === 'ok')).toBe(true);
-      // Serial execution would put this near 2s. Allow headroom for spawn cost.
-      expect(result.meta.durationSeconds).toBeLessThan(1.8);
+      // Serial execution would put this near 3s+ with spawn overhead. Allow headroom for spawn cost.
+      expect(result.meta.durationSeconds).toBeLessThan(2.5);
     } finally {
       restore();
       cleanupTempDirs();

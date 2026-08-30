@@ -8,7 +8,7 @@
 
 <p align="center">🥇 <b>The strongest free web search plugin for DeepSeek Harness (dsh)</b> 🥇</p>
 
-<p align="center">Engines: <b>Firecrawl</b> (keyless, default) · <b>Antigravity CLI</b> · <b>Tavily</b> · <b>Exa</b> · <b>Grok (X)</b> · <b>local</b>, with automatic failover</p>
+<p align="center">Engines: <b>Firecrawl</b> (keyless, default) · <b>Antigravity CLI</b> · <b>Ollama</b> · <b>Brave</b> · <b>Tavily</b> · <b>Exa</b> · <b>Grok (X)</b> · <b>local</b>, with automatic failover</p>
 
 <p align="center">
   <a href="./README.zh-CN.md">简体中文</a> ·
@@ -71,12 +71,14 @@ Firecrawl works with zero setup. Every other engine is one command away. Keys li
 | :-- | :-- | :-- | :-- |
 | Firecrawl (default) | web search + page fetch | keyless: 1,000 free credits/month, no signup. A free key adds your own 1,000/month | nothing, it works as installed |
 | Antigravity CLI | web search + page fetch | free, browser sign-in | install `agy` and sign in |
+| Ollama | web search + page fetch | free key with Ollama account | `modsearch config set ollama.apiKey <key>` |
+| Brave | web search | 2,000 queries/month, no card | `modsearch config set brave.apiKey <key>` |
 | Tavily | web search | 1,000 credits/month, no card | `modsearch config set tavily.apiKey <key>` |
 | Exa | web search | $10/month recurring credit (~1,400 searches), no card | `modsearch config set exa.apiKey <key>` |
 | Grok Build | X (Twitter) search | rides SuperGrok or X Premium | install `grok` and sign in |
 | local | page fetch | built in, nothing to install | nothing |
 
-Keys can also come from the environment (`TAVILY_API_KEY`, `EXA_API_KEY`, `FIRECRAWL_API_KEY`). One engine can take multiple keys as a comma-separated value such as `key-one,key-two`, in either the config file or its environment variable. Multiple engines configured means automatic failover, best first. Every engine participates by default. Exclude one with `modsearch config set tavily.enabled false`. Using a Tavily-, Exa-, or Firecrawl-compatible third-party or self-hosted endpoint? Point the engine at it: `modsearch config set tavily.baseURL <url>`. Official endpoints stay built into the code and are never written as default config. Every knob, engine by engine, is in the [configuration guide](skills/modsearch/references/configure.md).
+Keys can also come from the environment (`OLLAMA_API_KEY`, `BRAVE_API_KEY`, `TAVILY_API_KEY`, `EXA_API_KEY`, `FIRECRAWL_API_KEY`). One engine can take multiple keys as a comma-separated value such as `key-one,key-two`, in either the config file or its environment variable. Multiple engines configured means automatic failover, best first. Every engine participates by default. Exclude one with `modsearch config set ollama.enabled false`. Using an Ollama-, Brave-, Tavily-, Exa-, or Firecrawl-compatible third-party or self-hosted endpoint? Point the engine at it: `modsearch config set ollama.baseURL <url>`. Official endpoints stay built into the code and are never written as default config. Every knob, engine by engine, is in the [configuration guide](skills/modsearch/references/configure.md).
 
 ## Installation
 

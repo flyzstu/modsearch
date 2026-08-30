@@ -8,7 +8,7 @@
 
 <p align="center">🥇 <b>全网最强的 DeepSeek Harness (dsh) 免费联网搜索插件</b> 🥇</p>
 
-<p align="center">引擎：<b>Firecrawl</b>（免注册，默认）· <b>Antigravity CLI</b> · <b>Tavily</b> · <b>Exa</b> · <b>Grok（X）</b> · <b>local</b>，自动故障转移</p>
+<p align="center">引擎：<b>Firecrawl</b>（免注册，默认）· <b>Antigravity CLI</b> · <b>Ollama</b> · <b>Brave</b> · <b>Tavily</b> · <b>Exa</b> · <b>Grok（X）</b> · <b>local</b>，自动故障转移</p>
 
 <p align="center">
   <a href="./README.md">English</a> ·
@@ -71,12 +71,14 @@ Firecrawl 零配置直接可用，其余引擎各一条命令。key 存在 `~/.m
 | :-- | :-- | :-- | :-- |
 | Firecrawl（默认） | 网页搜索 + 单页抓取 | 免注册每月 1,000 免费 credits。注册免费 key 再得独享的每月 1,000 | 无需任何操作，装完即用 |
 | Antigravity CLI | 网页搜索 + 单页抓取 | 免费，浏览器登录 | 安装 `agy` 并登录 |
+| Ollama | 网页搜索 + 单页抓取 | 免费 key，需 Ollama 账号 | `modsearch config set ollama.apiKey <key>` |
+| Brave | 网页搜索 | 每月 2,000 次请求，不绑卡 | `modsearch config set brave.apiKey <key>` |
 | Tavily | 网页搜索 | 每月 1,000 credits，不绑卡 | `modsearch config set tavily.apiKey <key>` |
 | Exa | 网页搜索 | 每月 $10 循环额度（约 1,400 次），不绑卡 | `modsearch config set exa.apiKey <key>` |
 | Grok Build | X（推特）搜索 | 随 SuperGrok 或 X Premium 订阅 | 安装 `grok` 并登录 |
 | local | 单页抓取 | 内置，零安装 | 无需任何操作 |
 
-key 也可以走环境变量（`TAVILY_API_KEY`、`EXA_API_KEY`、`FIRECRAWL_API_KEY`）。同一引擎可在配置文件或环境变量中写入逗号分隔的多个 key，例如 `key-one,key-two`。配了多个引擎就自动故障转移，好的优先。每个引擎默认都参与，可以用 `modsearch config set tavily.enabled false` 排除一个。想用 Tavily、Exa、Firecrawl 兼容的第三方或自建端点？把引擎指过去即可：`modsearch config set tavily.baseURL <url>`。官方地址始终内置在代码里，不会作为默认配置写入文件。每个引擎的全部配置项见[配置指南](skills/modsearch/references/configure.zh-CN.md)。
+key 也可以走环境变量（`OLLAMA_API_KEY`、`BRAVE_API_KEY`、`TAVILY_API_KEY`、`EXA_API_KEY`、`FIRECRAWL_API_KEY`）。同一引擎可在配置文件或环境变量中写入逗号分隔的多个 key，例如 `key-one,key-two`。配了多个引擎就自动故障转移，好的优先。每个引擎默认都参与，可以用 `modsearch config set ollama.enabled false` 排除一个。想用 Ollama、Brave、Tavily、Exa、Firecrawl 兼容的第三方或自建端点？把引擎指过去即可：`modsearch config set ollama.baseURL <url>`。官方地址始终内置在代码里，不会作为默认配置写入文件。每个引擎的全部配置项见[配置指南](skills/modsearch/references/configure.zh-CN.md)。
 
 ## 安装
 

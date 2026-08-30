@@ -469,4 +469,40 @@ describe('config file', () => {
     expect(parsed.engines.local.model).toBe('m (file)');
     expect(parsed.engine).toBe('agy (file)');
   });
+
+  it('supports brave config and environment variable bindings', () => {
+    const p = tempConfigPath();
+    setConfigValue('brave.apiKey', 'BSA-file-key', p);
+    setConfigValue('brave.baseURL', 'https://gw.example.com/brave', p);
+    setConfigValue('brave-search.enabled', 'false', p);
+    const fileConfig = loadConfigFile(p);
+    expect(fileConfig.engines?.brave?.apiKey).toBe('BSA-file-key');
+    expect(fileConfig.engines?.brave?.baseURL).toBe('https://gw.example.com/brave');
+    expect(fileConfig.engines?.brave?.enabled).toBe(false);
+
+    const settings = engineSettings('brave', fileConfig, {
+      BRAVE_API_KEY: 'BSA-env-key',
+      BRAVE_BASE_URL: 'https://env.brave.example.com',
+    } as NodeJS.ProcessEnv);
+    expect(settings.apiKey).toBe('BSA-env-key');
+    expect(settings.baseURL).toBe('https://env.brave.example.com');
+  });
+
+  it('supports ollama config and environment variable bindings', () => {
+    const p = tempConfigPath();
+    setConfigValue('ollama.apiKey', 'ollama-file-key', p);
+    setConfigValue('ollama.baseURL', 'https://gw.example.com/ollama', p);
+    setConfigValue('ollama-search.enabled', 'false', p);
+    const fileConfig = loadConfigFile(p);
+    expect(fileConfig.engines?.ollama?.apiKey).toBe('ollama-file-key');
+    expect(fileConfig.engines?.ollama?.baseURL).toBe('https://gw.example.com/ollama');
+    expect(fileConfig.engines?.ollama?.enabled).toBe(false);
+
+    const settings = engineSettings('ollama', fileConfig, {
+      OLLAMA_API_KEY: 'ollama-env-key',
+      OLLAMA_BASE_URL: 'https://env.ollama.example.com',
+    } as NodeJS.ProcessEnv);
+    expect(settings.apiKey).toBe('ollama-env-key');
+    expect(settings.baseURL).toBe('https://env.ollama.example.com');
+  });
 });

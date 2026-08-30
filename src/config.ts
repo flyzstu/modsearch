@@ -76,6 +76,8 @@ export function currentConfigPath(): string {
 type StringEngineSetting = 'apiKey' | 'model' | 'bin' | 'baseURL';
 
 const ENV_BINDINGS: Record<string, Partial<Record<StringEngineSetting, string>>> = {
+  brave: { apiKey: 'BRAVE_API_KEY', baseURL: 'BRAVE_BASE_URL' },
+  ollama: { apiKey: 'OLLAMA_API_KEY', baseURL: 'OLLAMA_BASE_URL' },
   tavily: { apiKey: 'TAVILY_API_KEY', baseURL: 'TAVILY_BASE_URL' },
   exa: { apiKey: 'EXA_API_KEY', baseURL: 'EXA_BASE_URL' },
   firecrawl: { apiKey: 'FIRECRAWL_API_KEY', baseURL: 'FIRECRAWL_BASE_URL' },
@@ -95,6 +97,10 @@ const LEGACY_ENGINE_ROLES: Record<string, Role> = {
   'antigravity-cli': 'search',
   antigravity: 'search',
   agy: 'search',
+  brave: 'search',
+  'brave-search': 'search',
+  ollama: 'search',
+  'ollama-search': 'search',
   tavily: 'search',
   'grok-cli': 'social',
   grok: 'social',
@@ -106,6 +112,8 @@ const LEGACY_ENGINE_ROLES: Record<string, Role> = {
 const CANONICAL_ENGINE: Record<string, string> = {
   antigravity: 'antigravity-cli',
   agy: 'antigravity-cli',
+  'brave-search': 'brave',
+  'ollama-search': 'ollama',
   grok: 'grok-cli',
   http: 'local',
   direct: 'local',

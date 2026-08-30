@@ -20,7 +20,7 @@ window.__ModuleLoader__.load({
 
     // The engines the card offers, in the order the docs introduce them. The
     // host half carries the same list; both sides name what they show.
-    var ENGINES = ['antigravity-cli', 'tavily', 'exa', 'firecrawl', 'grok-cli', 'local'];
+    var ENGINES = ['antigravity-cli', 'ollama', 'brave', 'tavily', 'exa', 'firecrawl', 'grok-cli', 'local'];
 
     // The chain is a row of search engines, so the page fetcher is not in it.
     // `local` reads a URL it is handed and searches for nothing, and a tickbox

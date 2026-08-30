@@ -177,6 +177,42 @@ function diagnoseEngine(
     };
   }
 
+  if (engine.name === 'brave') {
+    const { count, source: keySource } = configuredApiKeys(
+      env.BRAVE_API_KEY,
+      config.engines?.brave?.apiKey,
+    );
+    const ready = count > 0;
+    return {
+      engine: engine.name,
+      enabled,
+      ready,
+      keySource,
+      reason: keySource
+        ? apiKeyPresentReason(count, keySource)
+        : 'no API key (not in BRAVE_API_KEY or the config file)',
+      ...(ready ? {} : { fix: 'modsearch config set brave.apiKey <key>' }),
+    };
+  }
+
+  if (engine.name === 'ollama') {
+    const { count, source: keySource } = configuredApiKeys(
+      env.OLLAMA_API_KEY,
+      config.engines?.ollama?.apiKey,
+    );
+    const ready = count > 0;
+    return {
+      engine: engine.name,
+      enabled,
+      ready,
+      keySource,
+      reason: keySource
+        ? apiKeyPresentReason(count, keySource)
+        : 'no API key (not in OLLAMA_API_KEY or the config file)',
+      ...(ready ? {} : { fix: 'modsearch config set ollama.apiKey <key>' }),
+    };
+  }
+
   if (engine.name === 'tavily') {
     const { count, source: keySource } = configuredApiKeys(
       env.TAVILY_API_KEY,

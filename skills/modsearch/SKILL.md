@@ -69,8 +69,8 @@ Three jobs, each with its own engines:
 
 | Role | Engines (best first) | Notes |
 | :-- | :-- | :-- |
-| search the web | `firecrawl`, `antigravity-cli`, `tavily`, `exa` | Firecrawl works keyless with no signup (1,000 free credits/month). agy is free with a browser sign-in. Tavily, Exa, and a free Firecrawl key add personal quotas. |
-| fetch a page | `firecrawl`, `antigravity-cli`, `local` | Firecrawl runs a cloud browser, keyless by default (`firecrawl.keylessFetch false` opts out). `local` needs nothing and is the default floor. |
+| search the web | `firecrawl`, `antigravity-cli`, `ollama`, `tavily`, `exa`, `brave` | Firecrawl works keyless with no signup (1,000 free credits/month). agy is free with a browser sign-in. Ollama, Tavily, Exa, Brave, and a free Firecrawl key add personal quotas. |
+| fetch a page | `firecrawl`, `antigravity-cli`, `ollama`, `local` | Firecrawl and Ollama run in the cloud, Firecrawl keyless by default (`firecrawl.keylessFetch false` opts out). `local` needs nothing and is the default floor. |
 | search X | `grok-cli` | Needs Grok Build with SuperGrok or X Premium. |
 
 modsearch picks per role from what is installed and falls through on failure, so do not probe first: run the command and read `results[].engine` to see who answered.

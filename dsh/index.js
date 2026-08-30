@@ -396,12 +396,12 @@ function renderFetchEvidence(value) {
 // ---------------------------------------------------------------------------
 
 /** The engines the card offers, in the order the docs introduce them. */
-const CARD_ENGINES = ['antigravity-cli', 'tavily', 'exa', 'firecrawl', 'grok-cli', 'local'];
+const CARD_ENGINES = ['antigravity-cli', 'ollama', 'brave', 'tavily', 'exa', 'firecrawl', 'grok-cli', 'local'];
 /** The HTTP engines: the only ones with a key and an endpoint to configure. */
-const KEYED_ENGINES = ['tavily', 'exa', 'firecrawl'];
+const KEYED_ENGINES = ['ollama', 'brave', 'tavily', 'exa', 'firecrawl'];
 /**
  * Engines whose `model` setting a run actually reads. The others are shown
- * without the field rather than with one nothing is behind: tavily, exa and
+ * without the field rather than with one nothing is behind: ollama, brave, tavily, exa and
  * firecrawl ignore it, and grok-cli follows whatever Grok Build is signed in
  * with.
  */
@@ -414,6 +414,8 @@ const MODEL_ENGINES = ['antigravity-cli'];
 const ENGINE_ALIASES = {
   antigravity: 'antigravity-cli',
   agy: 'antigravity-cli',
+  'brave-search': 'brave',
+  'ollama-search': 'ollama',
   grok: 'grok-cli',
   http: 'local',
   direct: 'local',
@@ -424,6 +426,8 @@ const ENGINE_ALIASES = {
  * a container that exports its key, and call a working engine unconfigured.
  */
 const ENGINE_ENV_BINDINGS = {
+  brave: { apiKey: 'BRAVE_API_KEY', baseURL: 'BRAVE_BASE_URL' },
+  ollama: { apiKey: 'OLLAMA_API_KEY', baseURL: 'OLLAMA_BASE_URL' },
   tavily: { apiKey: 'TAVILY_API_KEY', baseURL: 'TAVILY_BASE_URL' },
   exa: { apiKey: 'EXA_API_KEY', baseURL: 'EXA_BASE_URL' },
   firecrawl: { apiKey: 'FIRECRAWL_API_KEY', baseURL: 'FIRECRAWL_BASE_URL' },
