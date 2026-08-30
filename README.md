@@ -1,38 +1,43 @@
 <p align="center">
-  <img src="https://raw.githubusercontent.com/liustack/modsearch/main/assets/banner.jpg" width="100%" alt="ModSearch" />
+  <img src="https://raw.githubusercontent.com/flyzstu/modsearch/main/assets/banner.jpg" width="100%" alt="ModSearch" />
 </p>
 
 <h1 align="center">ModSearch</h1>
 
-<p align="center"><b>In the chat app your model can search the web. On the API it cannot. ModSearch puts the web back: web search, X search, page fetch. Free, no signup, no API key.</b></p>
+<p align="center"><b>In official apps, models have web access; switch to an API and they lose it. ModSearch gives it back: web search, X search, and single-page fetch. Free out of the box: no signup, no API key.</b></p>
 
 <p align="center">🥇 <b>The strongest free web search plugin for DeepSeek Harness (dsh)</b> 🥇</p>
 
-<p align="center">Engines: <b>Firecrawl</b> (keyless, default) · <b>Antigravity CLI</b> · <b>Ollama</b> · <b>Brave</b> · <b>Tavily</b> · <b>Exa</b> · <b>Grok (X)</b> · <b>local</b>, with automatic failover</p>
+<p align="center">Engines: <b>Firecrawl</b> (keyless, default) · <b>Antigravity CLI</b> · <b>Ollama Cloud</b> · <b>Brave</b> · <b>Tavily</b> · <b>Exa</b> · <b>Grok (X)</b> · <b>local</b>, with automatic failover</p>
 
 <p align="center">
   <a href="./README.zh-CN.md">简体中文</a> ·
   <a href="docs/troubleshooting.md">Troubleshooting</a> ·
   <a href="skills/modsearch/references/configure.md">Configuration</a> ·
   <a href="skills/modsearch/references/output-schema.md">Output contract</a> ·
-  <a href="docs/security.md">Security</a> ·
-  <a href="https://github.com/liustack/modlens">ModLens (vision)</a>
+  <a href="docs/security.md">Security</a>
 </p>
 
 <p align="center">
-  <a href="https://x.com/liustack"><img src="https://img.shields.io/badge/follow-%40liustack-black?style=flat-square&logo=x&logoColor=white" alt="Follow @liustack on X"></a>
-  <a href="https://www.npmjs.com/package/@liustack/modsearch"><img src="https://img.shields.io/npm/v/@liustack/modsearch?style=flat-square&label=npm&color=cb3837" alt="npm"></a>
   <a href="https://nodejs.org"><img src="https://img.shields.io/node/v/@liustack/modsearch?style=flat-square" alt="Node.js"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue?style=flat-square" alt="License"></a>
-  <img src="https://img.shields.io/badge/Not%20backed%20by-Y%20Combinator-FF6600?style=flat-square&logo=ycombinator&logoColor=white" alt="Not backed by Y Combinator">
-  <img src="https://img.shields.io/badge/users-unknown-lightgrey?style=flat-square" alt="Users unknown">
+  <img src="https://img.shields.io/badge/tests-469%20passed-brightgreen?style=flat-square" alt="Tests">
 </p>
+
+> [!NOTE]
+> **Fork & Divergence Notice**:  
+> This project is **forked from upstream [`liustack/modsearch`](https://github.com/liustack/modsearch)**. Because upstream does not accept community pull requests, this repository has diverged and is actively developed independently.  
+> **Key Enhancements**:
+> - ✨ **Ollama Cloud Integration**: Native integration with official Ollama REST APIs for both web search (`web_search`) and cloud page fetch (`web_fetch` with SSRF protection).
+> - ✨ **Brave Search Integration**: Full support for Brave Search API (2,000 free queries/month), 422 key validation, and 429 cooldown failover.
+> - ✨ **Multi-key Rotation & Enhanced Doctor**: Seamless failover across comma-separated keys and full offline diagnostics support.
+> - ✨ **Open Community**: Open for Issues and Pull Requests!
 
 Models like DeepSeek and GLM have no web access, or a weak one. ModSearch is a plug-in that greatly strengthens web search, X search, and single-page fetch. It works the moment it lands: the default engine is Firecrawl's keyless tier, [1,000 free credits every month](https://www.firecrawl.dev/blog/firecrawl-keyless-launch), with no account, no API key, and no card; with first-class support for **Ollama Cloud** (search & fetch) and **Brave Search** (2,000 free queries/month).
 
-## Talk to us
+## Feedback & Community
 
-Hit a problem? [Open an issue](https://github.com/liustack/modsearch/issues/new/choose). Everything else is welcome on X: **[@liustack](https://x.com/liustack)**. What you built with it, which harness you are on, what should come next. New releases land there first. A community space is on the way.
+Encounter a bug or want a new engine supported? Feel free to [open an issue](https://github.com/flyzstu/modsearch/issues) or submit a [Pull Request](https://github.com/flyzstu/modsearch/pulls).
 
 ## Features
 
@@ -50,19 +55,19 @@ All four screenshots are unedited runs, the first two from the Codex desktop app
 
 Give it a blog link and ask what the post says. Twenty-five seconds later: a structured summary of the whole post, with no browser involved.
 
-![Text-only DeepSeek summarising a blog link through ModSearch](https://raw.githubusercontent.com/liustack/modsearch/main/assets/demo-codex-fetch.png)
+![Text-only DeepSeek summarising a blog link through ModSearch](https://raw.githubusercontent.com/flyzstu/modsearch/main/assets/demo-codex-fetch.png)
 
 Give it no target at all, just "anything interesting in AI today?". Thirty-six seconds later: six sourced stories, with a closing note on which details came from aggregation and deserve a second look. The note comes from the `uncertainty` field.
 
-![An open-ended question comes back as six sourced stories with a stated confidence caveat](https://raw.githubusercontent.com/liustack/modsearch/main/assets/demo-codex-search.png)
+![An open-ended question comes back as six sourced stories with a stated confidence caveat](https://raw.githubusercontent.com/flyzstu/modsearch/main/assets/demo-codex-search.png)
 
 Ask dsh web for today's top AI stories. dsh's native search tool row runs straight on the modsearch engine chain, and eighteen seconds later three stories come back, each with a source link.
 
-![dsh web's native search running on the modsearch engine chain, returning three sourced stories](https://raw.githubusercontent.com/liustack/modsearch/main/assets/demo-dsh-web-search.png)
+![dsh web's native search running on the modsearch engine chain, returning three sourced stories](https://raw.githubusercontent.com/flyzstu/modsearch/main/assets/demo-dsh-web-search.png)
 
 Ask which Node.js line is still in maintenance. `read_page` reads the release page and the release schedule in turn, and sixty seconds later the verdict arrives with a version status table and sources at the end.
 
-![read_page reading two pages and returning the Node.js maintenance verdict](https://raw.githubusercontent.com/liustack/modsearch/main/assets/demo-dsh-web-fetch.png)
+![read_page reading two pages and returning the Node.js maintenance verdict](https://raw.githubusercontent.com/flyzstu/modsearch/main/assets/demo-dsh-web-fetch.png)
 
 ## Supported engines
 
@@ -85,16 +90,16 @@ Keys can also come from the environment (`OLLAMA_API_KEY`, `BRAVE_API_KEY`, `TAV
 
 **Step 1, hand it to your AI.** Search and page fetch work as soon as the skill lands, on Firecrawl's free keyless quota, so installation is one message:
 
-> Install and configure the modsearch skill following INSTALL.md at https://github.com/liustack/modsearch, then run the health check and tell me the result.
+> Install and configure the modsearch skill following INSTALL.md at https://github.com/flyzstu/modsearch, then run the health check and tell me the result.
 
-**Step 2 (optional), add more free engines.** Antigravity CLI writes better synthesized answers. A free Tavily, Exa, or Firecrawl key adds a personal quota on top of the keyless one. None requires a card. agy's browser sign-in is the only step that needs your hands:
+**Step 2 (optional), add more free engines.** Antigravity CLI writes better synthesized answers. A free Ollama, Brave, Tavily, Exa, or Firecrawl key adds a personal quota on top of the keyless one. None requires a card. agy's browser sign-in is the only step that needs your hands:
 
 ```bash
 curl -fsSL https://antigravity.google/cli/install.sh | bash
 agy                                                           # sign in, then exit
 ```
 
-Picked a key instead? Send one line to your AI: "set my tavily key to tvly-...".
+Picked a key instead? Send one line to your AI: "set my ollama key to ..." or "set my brave key to ...".
 
 dsh users have a path that never touches the command line. Settings → Plugins → Plugin config has a ModSearch card: pick the preferred engine, fill in an API key or a self-hosted endpoint, tick which engines join failover, hit save and it takes effect.
 
@@ -122,34 +127,14 @@ GitHub and other sites blocked because Steam++ / Watt Toolkit or a VPN pointed t
 
 ## Contributing
 
-This repo does not accept pull requests. The project is maintained by the author alone. Every line is reviewed in person, and that review is the premise of its reliability. Two effective ways to contribute:
+Contributions from the community are warmly welcomed!
 
-- **[Open an issue](https://github.com/liustack/modsearch/issues).** Bugs, suggestions, confusing errors, unclear docs. Issues are read and shape what gets built next.
-- **Fork it.** Under MIT your copy is fully yours to modify and publish.
-
-## Shameless plug
-
-Follow the WeChat official account **liustack** (Chinese-language): AI tools, practice, and ideas, posted as they land. Scan the code, or search WeChat for "liustack":
-
-<p align="center">
-  <img src="https://raw.githubusercontent.com/liustack/modsearch/main/assets/wechat-qrcode.png" width="420" alt="WeChat official account liustack" />
-</p>
-
-⭐ If it helps, star [ModSearch](https://github.com/liustack/modsearch). Stars are how the next developer finds it.
-
-## Star History
-
-<a href="https://www.star-history.com/?repos=liustack%2Fmodsearch&type=date&legend=top-left">
- <picture>
-   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/chart?repos=liustack/modsearch&type=date&theme=dark&legend=top-left&sealed_token=ymc92zQxHuDgpexZjaqDbEhMCuCjGHskpQGkzkwwrU0FksWoq5MasrMA64y9G2CxNV9O3EFeRjKneWSDYmHH4HWjpUiaAme0haCp-1Y72cRmHDv8coW35A" />
-   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/chart?repos=liustack/modsearch&type=date&legend=top-left&sealed_token=ymc92zQxHuDgpexZjaqDbEhMCuCjGHskpQGkzkwwrU0FksWoq5MasrMA64y9G2CxNV9O3EFeRjKneWSDYmHH4HWjpUiaAme0haCp-1Y72cRmHDv8coW35A" />
-   <img alt="Star History Chart" src="https://api.star-history.com/chart?repos=liustack/modsearch&type=date&legend=top-left&sealed_token=ymc92zQxHuDgpexZjaqDbEhMCuCjGHskpQGkzkwwrU0FksWoq5MasrMA64y9G2CxNV9O3EFeRjKneWSDYmHH4HWjpUiaAme0haCp-1Y72cRmHDv8coW35A" />
- </picture>
-</a>
+- **[Open an issue](https://github.com/flyzstu/modsearch/issues)**: Bugs, suggestions, confusing errors, or documentation improvements.
+- **[Submit a Pull Request](https://github.com/flyzstu/modsearch/pulls)**: Code enhancements and feature additions are always appreciated.
 
 ## Disclaimer
 
-ModSearch is MIT-licensed, so use is not restricted. The author gives no warranty and no endorsement for any particular use, commercial or otherwise. The upstream engines it drives (Antigravity CLI, Tavily, Exa, Firecrawl, Grok Build) each carry their own terms and quotas, and complying with them is the user's responsibility.
+ModSearch is MIT-licensed, so use is not restricted. The project gives no warranty and no endorsement for any particular use, commercial or otherwise. The upstream engines it drives (Ollama, Brave, Antigravity CLI, Tavily, Exa, Firecrawl, Grok Build) each carry their own terms and quotas, and complying with them is the user's responsibility.
 
 ## License
 

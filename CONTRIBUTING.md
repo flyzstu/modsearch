@@ -1,18 +1,13 @@
 # Contributing to ModSearch
 
-First, the policy: **ModSearch does not accept pull requests.** It is a
-deliberately small tool with a single maintainer who reviews and owns every
-line, and keeping that loop tight is what keeps it dependable.
+Contributions from the community are warmly welcomed!
 
-Two contributions that genuinely help:
+Ways to contribute:
 
-- **[Open an issue](https://github.com/liustack/modsearch/issues).** Bugs,
-  ideas, a confusing error message, docs that read wrong. Issues get read and
-  drive what gets built. The templates tell you what to include.
-- **Fork it.** The MIT license means your copy is fully yours: rename it,
-  rewire it, publish it. No permission needed.
+- **[Open an issue](https://github.com/flyzstu/modsearch/issues).** Bugs, ideas, a confusing error message, docs that read wrong.
+- **[Submit a Pull Request](https://github.com/flyzstu/modsearch/pulls).** New provider integrations, bug fixes, test expansions, and optimizations.
 
-Everything below is for people working on a fork.
+---
 
 ## Getting set up
 

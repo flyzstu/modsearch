@@ -67,7 +67,7 @@ equivalent ways. Use path A unless the user asked for the skills CLI.
 
 ```bash
 rm -rf /tmp/modsearch-src
-git clone --depth 1 https://github.com/liustack/modsearch.git /tmp/modsearch-src
+git clone --depth 1 https://github.com/flyzstu/modsearch.git /tmp/modsearch-src
 mkdir -p ~/.claude/skills/modsearch          # replace with your TARGET
 cp -R /tmp/modsearch-src/skills/modsearch/. ~/.claude/skills/modsearch/
 ```
