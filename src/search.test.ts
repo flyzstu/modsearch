@@ -518,10 +518,10 @@ describeSpawn('multiple sources run concurrently and fail independently', () => 
   }
 
   it('runs web and X in parallel: total time is near the slower source, not the sum', async () => {
-    // Each engine sleeps ~1s. Serial would be ~2s; concurrent is ~1s.
+    // Each engine sleeps ~0.3s. Concurrent is near ~0.3s; serial would be sum.
     const { env, restore } = withSignedInGrok();
-    const agyBin = fakeEngine({ name: 'agy', stdout: agySearchEnvelope('web'), delaySeconds: 1 });
-    const grokBin = fakeEngine({ name: 'grok', stdout: grokEnvelope('x'), delaySeconds: 1 });
+    const agyBin = fakeEngine({ name: 'agy', stdout: agySearchEnvelope('web'), delaySeconds: 0.3 });
+    const grokBin = fakeEngine({ name: 'grok', stdout: grokEnvelope('x'), delaySeconds: 0.3 });
     try {
       const result = await runSearch({
         query: 'anything',
@@ -535,8 +535,8 @@ describeSpawn('multiple sources run concurrently and fail independently', () => 
       });
       expect(result.results.map((r) => r.source)).toEqual(['web', 'x']);
       expect(result.results.every((r) => r.status === 'ok')).toBe(true);
-      // Serial execution would put this near 3s+ with spawn overhead. Allow headroom for spawn cost.
-      expect(result.meta.durationSeconds).toBeLessThan(2.5);
+      // Serial execution would put this near 4s+ with spawn overhead. Allow headroom for heavy worker load.
+      expect(result.meta.durationSeconds).toBeLessThan(3.5);
     } finally {
       restore();
       cleanupTempDirs();

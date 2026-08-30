@@ -28,7 +28,7 @@
   <img src="https://img.shields.io/badge/users-unknown-lightgrey?style=flat-square" alt="Users unknown">
 </p>
 
-DeepSeek 和 GLM 等模型没有联网能力或联网能力羸弱。ModSearch 通过外挂方式大幅增强模型联网搜索、X 搜索、单页抓取能力。装完即用：默认引擎是 Firecrawl 的免注册通道，[每月 1,000 免费 credits](https://www.firecrawl.dev/blog/firecrawl-keyless-launch)，不用注册账号，不用 API key，不用绑卡。
+DeepSeek 和 GLM 等模型没有联网能力或联网能力羸弱。ModSearch 通过外挂方式大幅增强模型联网搜索、X 搜索、单页抓取能力。装完即用：默认引擎是 Firecrawl 的免注册通道，[每月 1,000 免费 credits](https://www.firecrawl.dev/blog/firecrawl-keyless-launch)，不用注册账号，不用 API key，不用绑卡；同时深度集成 **Ollama Cloud**（Web Search & Fetch 双能力）与 **Brave Search**（每月 2,000 次免费搜索）等顶级引擎。
 
 ## 交流
 
@@ -37,9 +37,10 @@ DeepSeek 和 GLM 等模型没有联网能力或联网能力羸弱。ModSearch �
 ## 特性
 
 - **🥇 全网最强的 DeepSeek Harness (dsh) 免费联网搜索插件：** 一条命令即刻安装 `npx -y @deepseek-ai/dsh plugin --profile web add @liustack/modsearch@5.10.0`。细节见[接入指南](docs/harness-setup.zh-CN.md#deepseek-harness-dsh)。
-- **开箱免费，免注册。** 搜索和单页抓取默认跑在 Firecrawl 免注册通道上：[每月 1,000 免费 credits](https://www.firecrawl.dev/blog/firecrawl-keyless-launch)，没有账号、没有 API key、没有绑卡。后备通道也全部免费：Antigravity CLI 只需浏览器登录，Tavily、Exa 和免费的 Firecrawl key 各带独立的月度额度，均不要求绑卡。
+- **开箱免费，免注册。** 搜索和单页抓取默认跑在 Firecrawl 免注册通道上：[每月 1,000 免费 credits](https://www.firecrawl.dev/blog/firecrawl-keyless-launch)，没有账号、没有 API key、没有绑卡。后备通道也全部免费：Antigravity CLI 只需浏览器登录，Ollama Cloud、Brave、Tavily、Exa 和免费的 Firecrawl key 各带独立的月度额度，均不要求绑卡。
 - **自动故障转移。** 一个通道失败或额度耗尽时自动切换下一个。
-- **单引擎多密钥轮换。** Tavily、Exa、Firecrawl 都可配置逗号分隔的多个密钥。鉴权、限流或配额失败时先轮换到下一个密钥，再按引擎链故障转移。
+- **单引擎多密钥轮换。** Ollama、Brave、Tavily、Exa、Firecrawl 都可配置逗号分隔的多个密钥。鉴权、限流或配额失败时先轮换到下一个密钥，再按引擎链故障转移。
+- **支持 Ollama Cloud 与 Brave Search。** 原生对接 Ollama Web Search & Fetch 官方 REST API 与 Brave Search API，支持结构化正文提取与安全过滤。
 - **可搜索 X（推特）。** 安装 Grok Build 后，可检索网页索引覆盖不到的 X 内容。
 - **一次安装，多端可用。** 支持 Claude Code、Codex、Pi、OpenCode。
 
