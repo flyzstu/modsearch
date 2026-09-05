@@ -1,5 +1,11 @@
 # Changelog
 
+## 5.11.0 - 2026-09-05
+
+- Brave Search and Ollama join the engine chain. Brave Search authenticates with `X-Subscription-Token`, classifies rate-limit/quota/422 errors for failover, and reads `BRAVE_API_KEY`. Ollama covers web search (`/api/web_search`) and web fetch (`/api/web_fetch`) behind Bearer auth with the local SSRF private-network guard. Both support multi-key rotation with cooldown failover, doctor diagnostics, and the dsh settings card.
+- AnySearch joins as a full provider: vertical search (`/v1/search`), clean extract (`/v1/extract`), and domain capability discovery (`/v1/domains`, `/v1/sub-domains`) through a REST client with retry, timeout, and parameter validation, wired into the standard engine adapter with multi-key rotation and SSRF protection, plus dsh tools (`anysearch_search`, `anysearch_batch_search`, `anysearch_capabilities`), config, doctor, and settings-card support.
+- Fork housekeeping: README and contributing now carry a fork-divergence notice and drop upstream author-specific branding, and project descriptions highlight Ollama Cloud and Brave Search.
+
 ## 5.10.0 - 2026-08-28
 
 - With `allowPrivateNetwork` on, the local fetcher now trusts the operating system's certificate store alongside Node's bundled CAs (#22). Hosts-file accelerators such as Watt Toolkit (Steam++) point public domains at `127.0.0.1` and terminate TLS with a locally installed self-signed CA, so allowing the private target still failed certificate verification unless Node was launched with `NODE_USE_SYSTEM_CA=1`. The merged list keeps every bundled CA, loads once per process through `tls.getCACertificates` (Node 22.15+, older runtimes keep the previous behavior), and applies only while the switch is on: with `allowPrivateNetwork` off nothing reads the system store and connections verify exactly as before. Certificate verification itself is never relaxed. The blocked-target error now names hosts-file accelerators when the refused address is loopback, literal `127.0.0.1` URLs included, and the troubleshooting, security, and README pages document the scenario in both languages.
