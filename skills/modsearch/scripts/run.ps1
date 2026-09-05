@@ -24,7 +24,7 @@ $ErrorActionPreference = 'Stop'
 # package.json version, and the release script rewrites it on every bump.
 $Package = '@flyzstu/modsearch'
 $Bin = 'modsearch'
-$Pinned = '5.11.0'
+$Pinned = '5.11.1'
 # -------------------------------------------------------------------------------
 
 $NativeNote = 'no native artifact is published for this tool yet; phase A ships npm launch paths only'
