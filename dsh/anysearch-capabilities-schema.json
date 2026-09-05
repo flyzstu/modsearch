@@ -1,0 +1,58 @@
+{
+  "oneOf": [
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "kind": { "type": "string", "const": "domains", "required": true },
+        "requestId": { "type": "string" },
+        "domains": {
+          "type": "array",
+          "required": true,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "domain": { "type": "string", "required": true },
+              "description": { "type": "string", "required": true },
+              "subDomainCount": { "type": "integer", "required": true }
+            }
+          }
+        }
+      }
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "kind": { "type": "string", "const": "sub_domains", "required": true },
+        "requestId": { "type": "string" },
+        "domains": {
+          "type": "array",
+          "required": true,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "domain": { "type": "string", "required": true },
+              "description": { "type": "string", "required": true },
+              "subDomains": {
+                "type": "array",
+                "required": true,
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "subDomain": { "type": "string", "required": true },
+                    "description": { "type": "string", "required": true },
+                    "params": { "type": "object", "required": true, "additionalProperties": true }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}

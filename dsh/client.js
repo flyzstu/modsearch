@@ -18,9 +18,17 @@ window.__ModuleLoader__.load({
     var module = { exports: {} };
     var exports = module.exports;
 
-    // The engines the card offers, in the order the docs introduce them. The
-    // host half carries the same list; both sides name what they show.
-    var ENGINES = ['antigravity-cli', 'ollama', 'brave', 'tavily', 'exa', 'firecrawl', 'grok-cli', 'local'];
+    var ENGINES = [
+      'antigravity-cli',
+      'ollama',
+      'brave',
+      'tavily',
+      'exa',
+      'firecrawl',
+      'anysearch',
+      'grok-cli',
+      'local',
+    ];
 
     // The chain is a row of search engines, so the page fetcher is not in it.
     // `local` reads a URL it is handed and searches for nothing, and a tickbox
@@ -718,7 +726,7 @@ window.__ModuleLoader__.load({
                       h(
                         'option',
                         { key: name, value: name, style: optionPaint },
-                        name === 'firecrawl' ? `${name}${t.keylessSuffix}` : name,
+                        name === 'firecrawl' || name === 'anysearch' ? `${name}${t.keylessSuffix}` : name,
                       ),
                     ),
                   ),
@@ -734,7 +742,7 @@ window.__ModuleLoader__.load({
               // The default engine asks for no signup at all. Silence here
               // reads as a key being required, which is the one thing this
               // engine does not need.
-              draft.engine === 'firecrawl' && !current.hasKey
+              (draft.engine === 'firecrawl' || draft.engine === 'anysearch') && !current.hasKey
                 ? hint(t.keylessTier, 'keyless-tier')
                 : null,
               canKey ? textField(t.baseUrl, 'baseURL', t.endpointFallback) : null,

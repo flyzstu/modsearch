@@ -1,0 +1,78 @@
+{
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "items": {
+      "type": "array",
+      "required": true,
+      "items": {
+        "oneOf": [
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "index": { "type": "integer", "required": true },
+              "query": { "type": "string", "required": true },
+              "ok": { "type": "boolean", "const": true, "required": true },
+              "requestId": { "type": "string" },
+              "results": {
+                "type": "array",
+                "required": true,
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "title": { "type": "string", "required": true },
+                    "url": { "type": "string", "required": true },
+                    "snippet": { "type": "string" },
+                    "content": { "type": "string" }
+                  }
+                }
+              },
+              "metadata": {
+                "type": "object",
+                "required": true,
+                "additionalProperties": false,
+                "properties": {
+                  "totalResults": { "type": "integer", "required": true },
+                  "searchTimeMs": { "type": "integer", "required": true }
+                }
+              }
+            }
+          },
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "index": { "type": "integer", "required": true },
+              "query": { "type": "string", "required": true },
+              "ok": { "type": "boolean", "const": false, "required": true },
+              "error": {
+                "type": "object",
+                "required": true,
+                "additionalProperties": false,
+                "properties": {
+                  "message": { "type": "string", "required": true },
+                  "httpStatus": { "type": "integer" },
+                  "requestId": { "type": "string" },
+                  "retryAfter": { "type": "string" }
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
+    "summary": {
+      "type": "object",
+      "required": true,
+      "additionalProperties": false,
+      "properties": {
+        "total": { "type": "integer", "required": true },
+        "succeeded": { "type": "integer", "required": true },
+        "failed": { "type": "integer", "required": true }
+      }
+    },
+    "renderedContentTruncated": { "type": "boolean", "required": true }
+  }
+}

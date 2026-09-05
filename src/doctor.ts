@@ -163,6 +163,24 @@ function diagnoseEngine(
   const settings = engineSettings(engine.name, config, env);
   const enabled = settings.enabled !== false;
 
+  if (engine.name === 'anysearch') {
+    const { count, source: keySource } = configuredApiKeys(
+      env.ANYSEARCH_API_KEY,
+      config.engines?.anysearch?.apiKey,
+    );
+    const ready = count > 0;
+    return {
+      engine: engine.name,
+      enabled,
+      ready,
+      keySource,
+      reason: keySource
+        ? apiKeyPresentReason(count, keySource)
+        : 'no API key (not in ANYSEARCH_API_KEY or the config file)',
+      ...(ready ? {} : { fix: 'modsearch config set anysearch.apiKey <key>' }),
+    };
+  }
+
   if (engine.name === 'antigravity-cli') {
     const bin = settings.bin || 'agy';
     const ready = commandOnPath(bin, env);

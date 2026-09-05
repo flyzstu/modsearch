@@ -76,6 +76,7 @@ export function currentConfigPath(): string {
 type StringEngineSetting = 'apiKey' | 'model' | 'bin' | 'baseURL';
 
 const ENV_BINDINGS: Record<string, Partial<Record<StringEngineSetting, string>>> = {
+  anysearch: { apiKey: 'ANYSEARCH_API_KEY', baseURL: 'ANYSEARCH_BASE_URL' },
   brave: { apiKey: 'BRAVE_API_KEY', baseURL: 'BRAVE_BASE_URL' },
   ollama: { apiKey: 'OLLAMA_API_KEY', baseURL: 'OLLAMA_BASE_URL' },
   tavily: { apiKey: 'TAVILY_API_KEY', baseURL: 'TAVILY_BASE_URL' },

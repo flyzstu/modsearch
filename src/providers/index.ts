@@ -1,4 +1,5 @@
 import type { EngineSettings, Role } from '../config.ts';
+import { anysearchProvider } from './anysearch.ts';
 import { antigravityCliProvider } from './antigravity.ts';
 import { braveProvider } from './brave.ts';
 import { exaProvider } from './exa.ts';
@@ -81,6 +82,7 @@ export interface SearchEngine {
 }
 
 const ENGINES: Record<string, SearchEngine> = {
+  anysearch: anysearchProvider,
   'antigravity-cli': antigravityCliProvider,
   antigravity: antigravityCliProvider,
   agy: antigravityCliProvider,
@@ -106,15 +108,14 @@ const ENGINES: Record<string, SearchEngine> = {
  */
 export const ROLE_PREFERENCE: Record<Role, string[]> = {
   // Firecrawl leads: its keyless allowance works on a bare machine with no
-  // signup, which is the product's zero-setup promise. agy synthesizes and
-  // cites but its weekly quota is small, so it backs Firecrawl up rather than
-  // fronting the chain. Tavily, Exa, Brave, and Ollama are keyed backups.
-  search: ['firecrawl', 'antigravity-cli', 'ollama', 'tavily', 'exa', 'brave'],
+  // signup, which is the product's zero-setup promise. Tavily, Exa, Brave, Ollama,
+  // and AnySearch are keyed backups.
+  search: ['firecrawl', 'antigravity-cli', 'ollama', 'tavily', 'exa', 'brave', 'anysearch'],
   // Firecrawl runs a cloud browser for JS-heavy pages, keyless by default
-  // (opt out with firecrawl.keylessFetch false). agy extracts to a focus. The
+  // (opt out with firecrawl.keylessFetch false). anysearch extracts and cleans. The
   // local needs no setup and returns the page as served, so it stays the
   // default floor unless the user disables it.
-  fetch: ['firecrawl', 'antigravity-cli', 'ollama', 'local'],
+  fetch: ['firecrawl', 'antigravity-cli', 'ollama', 'anysearch', 'local'],
   // Only xAI can see inside X.
   social: ['grok-cli'],
 };

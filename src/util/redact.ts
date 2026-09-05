@@ -9,8 +9,9 @@
  * a leaked key does not.
  */
 const TOKEN_SHAPES: RegExp[] = [
-  // Vendor-prefixed keys (OpenAI/Anthropic sk-, Stripe rk/pk, Slack xox*).
+  // Vendor-prefixed keys (OpenAI/Anthropic sk-, Stripe rk/pk, Slack xox*, AnySearch as_sk_*).
   /\b(?:sk|rk|pk|xox[a-z])-[A-Za-z0-9_-]{12,}\b/g,
+  /\bas_sk_[A-Za-z0-9_-]{8,}\b/g,
   // Google API keys.
   /\bAIza[A-Za-z0-9_-]{20,}\b/g,
   // GitHub tokens.

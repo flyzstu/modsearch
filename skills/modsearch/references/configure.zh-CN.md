@@ -10,11 +10,11 @@
 
 | 工作 | 引擎 | 可配置吗 |
 | :-- | :-- | :-- |
-| 搜公开网页 | `firecrawl`、`antigravity-cli`、`ollama`、`tavily`、`exa`、`brave` | 首选引擎加每引擎参与开关 |
-| 读一个 URL | 首选引擎（若它能抓取），然后是 `firecrawl`、`antigravity-cli`、`ollama`、`local` | 每引擎参与开关 |
+| 搜公开网页 | `firecrawl`、`antigravity-cli`、`ollama`、`tavily`、`exa`、`brave`、`anysearch` | 首选引擎加每引擎参与开关 |
+| 读一个 URL | 首选引擎（若它能抓取），然后是 `firecrawl`、`antigravity-cli`、`ollama`、`anysearch`、`local` | 每引擎参与开关 |
 | 搜 X（推特） | `grok-cli` | 每引擎参与开关 |
 
-搜索顺序固定为 `firecrawl`、`antigravity-cli`、`ollama`、`tavily`、`exa`、`brave`。抓取顺序是 `firecrawl`、`antigravity-cli`、`ollama`、`local`。每个引擎默认都参与。`engines.<name>.enabled: false` 会先排除一个引擎，可用性再过滤剩余名单，额度冷却最后重排就绪链（见下文）。Firecrawl 领跑两条链，因为它的免注册通道在裸机上就能用，不要账号不要 key。
+搜索顺序固定为 `firecrawl`、`antigravity-cli`、`ollama`、`tavily`、`exa`、`brave`、`anysearch`。抓取顺序是 `firecrawl`、`antigravity-cli`、`ollama`、`anysearch`、`local`。每个引擎默认都参与。`engines.<name>.enabled: false` 会先排除一个引擎，可用性再过滤剩余名单，额度冷却最后重排就绪链（见下文）。Firecrawl 领跑两条链，因为它的免注册通道在裸机上就能用，不要账号不要 key。
 
 从这张表能推出两个事实，它们回答大多数问题：
 
@@ -53,6 +53,7 @@ modsearch config show     # 生效配置：文件与环境变量合并，每个�
   "cooldown": "on",
   "allowPrivateNetwork": false,
   "engines": {
+    "anysearch":       { "apiKey": "as_sk_...", "baseURL": "https://api.anysearch.com" },
     "antigravity-cli": { "bin": "agy", "model": "gemini-3.6-flash-low" },
     "ollama":          { "apiKey": "...", "baseURL": "https://ollama.com" },
     "brave":           { "apiKey": "BSA...", "baseURL": "https://api.search.brave.com" },
@@ -68,13 +69,13 @@ JSON 不支持注释，所以每个字段的说明在这里：
 
 | 字段 | 类型 | 作用范围 | 含义 |
 | :-- | :-- | :-- | :-- |
-| `engine` | string | 顶层 | 由哪个引擎搜索。空表示自动（用本机可用的最好那个）。取值 `antigravity-cli`、`ollama`、`brave`、`tavily`、`exa`、`firecrawl` 之一。别名 `agy`、`antigravity`、`brave-search`、`ollama-search`、`grok`、`http`、`direct` 也接受，会归一为正式名。 |
+| `engine` | string | 顶层 | 由哪个引擎搜索。空表示自动（用本机可用的最好那个）。取值 `anysearch`、`antigravity-cli`、`ollama`、`brave`、`tavily`、`exa`、`firecrawl` 之一。别名 `agy`、`antigravity`、`brave-search`、`ollama-search`、`grok`、`http`、`direct` 也接受，会归一为正式名。 |
 | `cooldown` | `"on"` / `"off"` | 顶层 | 额度冷却故障转移。默认开。关掉后不读不写任何状态，路由与从前完全一致。 |
-| `allowPrivateNetwork` | boolean | 顶层 | 本地网络策略：允许本地抓取器访问保留和私有地址段。它从不授权 Firecrawl 云端披露。URL 中直写的私有和保留地址目标始终不会发往云端。主机名的 DNS 结果采用更窄的规则。Firecrawl 把 `198.18.0.0/15` 视为疑似 fake-ip 占位值，只有所有解析地址都是真私网或保留地址时才会拒绝披露。默认 `false`。 |
+| `allowPrivateNetwork` | boolean | 顶层 | 本地网络策略：允许本地抓取器访问保留和私有地址段。它从不授权 Firecrawl 或 AnySearch 云端披露。URL 中直写的私有和保留地址目标始终不会发往云端。主机名的 DNS 结果采用更窄的规则。云端抓取器把 `198.18.0.0/15` 视为疑似 fake-ip 占位值，只有所有解析地址都是真私网或保留地址时才会拒绝披露。默认 `false`。 |
 | `engines` | object | 顶层 | 按引擎正式名分组的每引擎设置。 |
 | `engines.<name>.enabled` | boolean | 所有引擎 | 是否允许自动路由使用该引擎。省略表示启用。设为 `false` 会排除它，设为 `true` 会删除覆盖并回到内置默认。单次显式 `--engine` 仍会强制使用该引擎。 |
-| `engines.<name>.apiKey` | string | `ollama`、`brave`、`tavily`、`exa`、`firecrawl` | 一个 API key，或用英文逗号分隔的多个 key。解析时会忽略空白和空项。鉴权、限流或配额失败时按顺序轮换 key。网络、5xx 或解析失败时直接切换下一个引擎。也可用环境变量 `OLLAMA_API_KEY` / `BRAVE_API_KEY` / `TAVILY_API_KEY` / `EXA_API_KEY` / `FIRECRAWL_API_KEY`，环境变量优先于文件。 |
-| `engines.<name>.baseURL` | string | `ollama`、`brave`、`tavily`、`exa`、`firecrawl` | 替换官方主机的接口地址：兼容的第三方网关、代理、自建部署。必须是完整的 http(s) URL。也可用环境变量 `OLLAMA_BASE_URL` / `BRAVE_BASE_URL` / `TAVILY_BASE_URL` / `EXA_BASE_URL` / `FIRECRAWL_BASE_URL`。设为空即取消。详见下方端点一节。 |
+| `engines.<name>.apiKey` | string | `anysearch`、`ollama`、`brave`、`tavily`、`exa`、`firecrawl` | 一个 API key，或用英文逗号分隔的多个 key。解析时会忽略空白和空项。鉴权、限流或配额失败时按顺序轮换 key。网络、5xx 或解析失败时直接切换下一个引擎。也可用环境变量 `ANYSEARCH_API_KEY` / `OLLAMA_API_KEY` / `BRAVE_API_KEY` / `TAVILY_API_KEY` / `EXA_API_KEY` / `FIRECRAWL_API_KEY`，环境变量优先于文件。 |
+| `engines.<name>.baseURL` | string | `anysearch`、`ollama`、`brave`、`tavily`、`exa`、`firecrawl` | 替换官方主机的接口地址：兼容的第三方网关、代理、自建部署。必须是完整的 http(s) URL。也可用环境变量 `ANYSEARCH_BASE_URL` / `OLLAMA_BASE_URL` / `BRAVE_BASE_URL` / `TAVILY_BASE_URL` / `EXA_BASE_URL` / `FIRECRAWL_BASE_URL`。设为空即取消。详见下方端点一节。 |
 | `engines.firecrawl.keylessFetch` | boolean | `firecrawl` | 允许 Firecrawl 在无 key 时抓取公网页面。默认 `true`（免注册抓取开箱即开）。设为 `false` 可让自动抓取远离 Firecrawl 云端。配置了 key 或显式选择 Firecrawl 引擎时仍会启用。 |
 | `engines.<name>.bin` | string | `antigravity-cli`、`grok-cli` | 该引擎 CLI 的路径。默认在 `PATH` 上找 `agy` 和 `grok`。 |
 | `engines.<name>.model` | string | `antigravity-cli` | 引擎使用的模型。默认 `gemini-3.6-flash-low`。 |
@@ -105,6 +106,17 @@ tavily.apiKey` 管道喂入也行）。用户还是直接贴进对话的话，�
 角色概念出现之前写的配置（一个全局 `provider` 加一个 `providers` 表）会被自动读取并映射，不用手动迁移。
 
 ## 引擎设置
+
+### anysearch（搜索 + 抓取，免 Key 体验 / API Key 独立配额）
+
+官方 AnySearch REST API（https://api.anysearch.com）。支持公共免 Key 体验，也支持填入专属 API Key 获取独立配额与高并发能力。
+
+```bash
+modsearch config set anysearch.apiKey <key>
+# 或环境变量：export ANYSEARCH_API_KEY=<key>
+```
+
+AnySearch 支持垂直领域搜索、1-5 项并发批量搜索、领域能力动态发现与高质量正文清洗提取。
 
 ### antigravity-cli（搜索 + 抓取，免费，无 key）
 

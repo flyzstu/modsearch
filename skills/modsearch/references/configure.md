@@ -10,11 +10,11 @@ Three jobs, called roles. Each role has engines that can do it:
 
 | Job | Engines | Configurable? |
 | :-- | :-- | :-- |
-| search the public web | `firecrawl`, `antigravity-cli`, `ollama`, `tavily`, `exa`, `brave` | preferred engine plus per-engine participation |
-| read one URL | the preferred engine if it can fetch, then `firecrawl`, `antigravity-cli`, `ollama`, `local` | per-engine participation |
+| search the public web | `firecrawl`, `antigravity-cli`, `ollama`, `tavily`, `exa`, `brave`, `anysearch` | preferred engine plus per-engine participation |
+| read one URL | the preferred engine if it can fetch, then `firecrawl`, `antigravity-cli`, `ollama`, `anysearch`, `local` | per-engine participation |
 | search X (Twitter) | `grok-cli` | per-engine participation |
 
-The search order is fixed at `firecrawl` then `antigravity-cli` then `ollama` then `tavily` then `exa` then `brave`, and fetch is `firecrawl` then `antigravity-cli` then `ollama` then `local`. Every engine participates by default. `engines.<name>.enabled: false` filters one out, availability filters what remains, and quota cooldown reorders the ready chain (see below). Firecrawl leads both chains because its keyless tier works on a bare machine, no signup, no key.
+The search order is fixed at `firecrawl` then `antigravity-cli` then `ollama` then `tavily` then `exa` then `brave` then `anysearch`, and fetch is `firecrawl` then `antigravity-cli` then `ollama` then `anysearch` then `local`. Every engine participates by default. `engines.<name>.enabled: false` filters one out, availability filters what remains, and quota cooldown reorders the ready chain (see below). Firecrawl leads both chains because its keyless tier works on a bare machine, no signup, no key.
 
 Two facts follow from this table, and they answer most questions:
 
@@ -53,6 +53,7 @@ Full structure. Every field is optional, and so is the file itself:
   "cooldown": "on",
   "allowPrivateNetwork": false,
   "engines": {
+    "anysearch":       { "apiKey": "as_sk_...", "baseURL": "https://api.anysearch.com" },
     "antigravity-cli": { "bin": "agy", "model": "gemini-3.6-flash-low" },
     "ollama":          { "apiKey": "...", "baseURL": "https://ollama.com" },
     "brave":           { "apiKey": "BSA...", "baseURL": "https://api.search.brave.com" },
@@ -68,13 +69,13 @@ JSON has no comments, so here is every field:
 
 | Field | Type | Applies to | Meaning |
 | :-- | :-- | :-- | :-- |
-| `engine` | string | top level | Which engine searches. Empty means automatic (the best available here). One of `antigravity-cli`, `ollama`, `brave`, `tavily`, `exa`, `firecrawl`. The aliases `agy`, `antigravity`, `brave-search`, `ollama-search`, `grok`, `http`, `direct` are accepted and normalized to the canonical name. |
+| `engine` | string | top level | Which engine searches. Empty means automatic (the best available here). One of `anysearch`, `antigravity-cli`, `ollama`, `brave`, `tavily`, `exa`, `firecrawl`. The aliases `agy`, `antigravity`, `brave-search`, `ollama-search`, `grok`, `http`, `direct` are accepted and normalized to the canonical name. |
 | `cooldown` | `"on"` / `"off"` | top level | Quota cooldown failover. On by default. Off reads and writes no state and routes exactly as before. |
-| `allowPrivateNetwork` | boolean | top level | Local network policy: allow the local fetcher to reach reserved and private address ranges. It never authorizes Firecrawl cloud disclosure. Literal private and reserved targets always stay off the cloud. For hostname DNS answers, Firecrawl treats `198.18.0.0/15` as a likely fake-IP placeholder and withholds the URL only when every resolved address is genuinely private or reserved. `false` by default. |
+| `allowPrivateNetwork` | boolean | top level | Local network policy: allow the local fetcher to reach reserved and private address ranges. It never authorizes Firecrawl or AnySearch cloud disclosure. Literal private and reserved targets always stay off the cloud. For hostname DNS answers, cloud fetchers treat `198.18.0.0/15` as a likely fake-IP placeholder and withhold the URL only when every resolved address is genuinely private or reserved. `false` by default. |
 | `engines` | object | top level | Per-engine settings, keyed by canonical engine name. |
 | `engines.<name>.enabled` | boolean | every engine | Whether automatic routing may use this engine. Missing means enabled. Set `false` to exclude it. Setting `true` removes the override and returns to the built-in default. An explicit `--engine` still forces that engine for one run. |
-| `engines.<name>.apiKey` | string | `ollama`, `brave`, `tavily`, `exa`, `firecrawl` | One API key, or multiple keys separated by commas. Whitespace and empty comma items are ignored. Authentication, rate-limit, and quota failures rotate through the keys in order. Network, 5xx, and parsing failures go directly to the next engine. Also settable via `OLLAMA_API_KEY` / `BRAVE_API_KEY` / `TAVILY_API_KEY` / `EXA_API_KEY` / `FIRECRAWL_API_KEY`, which win over the file. |
-| `engines.<name>.baseURL` | string | `ollama`, `brave`, `tavily`, `exa`, `firecrawl` | Endpoint base replacing the official host: a compatible third-party gateway, a proxy, a self-hosted deployment. Must be a full http(s) URL. Also settable via `OLLAMA_BASE_URL` / `BRAVE_BASE_URL` / `TAVILY_BASE_URL` / `EXA_BASE_URL` / `FIRECRAWL_BASE_URL`. Empty unsets it. See the endpoint section below. |
+| `engines.<name>.apiKey` | string | `anysearch`, `ollama`, `brave`, `tavily`, `exa`, `firecrawl` | One API key, or multiple keys separated by commas. Whitespace and empty comma items are ignored. Authentication, rate-limit, and quota failures rotate through the keys in order. Network, 5xx, and parsing failures go directly to the next engine. Also settable via `ANYSEARCH_API_KEY` / `OLLAMA_API_KEY` / `BRAVE_API_KEY` / `TAVILY_API_KEY` / `EXA_API_KEY` / `FIRECRAWL_API_KEY`, which win over the file. |
+| `engines.<name>.baseURL` | string | `anysearch`, `ollama`, `brave`, `tavily`, `exa`, `firecrawl` | Endpoint base replacing the official host: a compatible third-party gateway, a proxy, a self-hosted deployment. Must be a full http(s) URL. Also settable via `ANYSEARCH_BASE_URL` / `OLLAMA_BASE_URL` / `BRAVE_BASE_URL` / `TAVILY_BASE_URL` / `EXA_BASE_URL` / `FIRECRAWL_BASE_URL`. Empty unsets it. See the endpoint section below. |
 | `engines.firecrawl.keylessFetch` | boolean | `firecrawl` | Allow public-page fetch through Firecrawl without a key. Default `true` (keyless fetch is on as installed). Set `false` to keep automatic page fetch off Firecrawl's cloud; a configured key or an explicit Firecrawl engine choice still enables it. |
 | `engines.<name>.bin` | string | `antigravity-cli`, `grok-cli` | Path to the engine's CLI binary. Defaults to `agy` and `grok` found on `PATH`. |
 | `engines.<name>.model` | string | `antigravity-cli` | Model the engine uses. Defaults to `gemini-3.6-flash-low`. |
@@ -106,6 +107,17 @@ The shared `enabled` switch applies to search, fetch, and X. Fetching uses the p
 A config written before roles existed (one global `provider` plus a `providers` map) is read and mapped automatically. Nothing to migrate by hand.
 
 ## Engine setup
+
+### anysearch (search + fetch, keyless tier & API key)
+
+Official AnySearch REST API (https://api.anysearch.com). Offers keyless public extraction / search tiers and dedicated API keys for high concurrency.
+
+```bash
+modsearch config set anysearch.apiKey <key>
+# or environment: export ANYSEARCH_API_KEY=<key>
+```
+
+AnySearch covers vertical domain search, 1-5 item concurrent batch search, domain capability discovery, and cleaned web extract.
 
 ### antigravity-cli (search + fetch, free, no key)
 

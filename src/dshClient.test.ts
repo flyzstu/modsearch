@@ -112,10 +112,11 @@ const SUMMARY = {
     },
     exa: { baseURL: '', model: '', hasKey: false, keySource: null, enabled: false },
     firecrawl: { baseURL: '', model: '', hasKey: false, keySource: null, enabled: true },
+    anysearch: { baseURL: '', model: '', hasKey: false, keySource: null, enabled: true },
     'grok-cli': { baseURL: '', model: '', hasKey: false, keySource: null, enabled: true },
     local: { baseURL: '', model: '', hasKey: false, keySource: null, enabled: true },
   },
-  keyed: ['ollama', 'brave', 'tavily', 'exa', 'firecrawl'],
+  keyed: ['ollama', 'brave', 'tavily', 'exa', 'firecrawl', 'anysearch'],
   models: ['antigravity-cli'],
 };
 
@@ -252,6 +253,7 @@ describe('a save carries only what the save is about', () => {
         tavily: true,
         exa: false,
         firecrawl: true,
+        anysearch: true,
         'grok-cli': true,
         local: true,
       },
@@ -573,6 +575,7 @@ describe('the automatic engine chain lists what this machine can actually search
       'tavily',
       'exa',
       'firecrawl',
+      'anysearch',
       'grok-cli X search only',
     ]);
     expect(view.texts.some((text) => /status is unavailable/i.test(text))).toBe(true);
@@ -745,6 +748,7 @@ describe('the preference list offers only engines a preference can mean', () => 
       'tavily',
       'exa',
       'firecrawl',
+      'anysearch',
       'grok-cli',
     ]);
   });
