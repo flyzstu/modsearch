@@ -18,7 +18,7 @@ dsh 和其他宿主不一样：modsearch 以原生插件接入，不走提示词
 插件开关、profile patch、运行时验证、更新方法和兼容性检查见独立的 [dsh 插件指南](dsh.zh-CN.md)。
 
 ```sh
-npx -y @deepseek-ai/dsh plugin --profile web add @liustack/modsearch@5.11.0
+npx -y @deepseek-ai/dsh plugin --profile web add @flyzstu/modsearch@5.11.0
 ```
 
 一次落地三件事：
@@ -36,10 +36,10 @@ dsh 跑在 Electron 桌面宿主里时，插件也能正常工作。Electron 会
 安装当前版本或刷新已有 profile 时，重跑 `add` 并点名版本号：
 
 ```sh
-npx -y @deepseek-ai/dsh plugin --profile <name> add @liustack/modsearch@5.11.0
+npx -y @deepseek-ai/dsh plugin --profile <name> add @flyzstu/modsearch@5.11.0
 ```
 
-`npm view @liustack/modsearch version` 可以查到当前版本号。本页的版本号由发布流程自动同步。这里继续使用 `add` 也是有意的，因为它会用上面点名的精确版本替换 profile 中记录的安装请求。不要换成 `update`，后者只在已记录的 semver 请求内更新，还会再次让 pnpm 经过发布时长过滤来选版本。
+`npm view @flyzstu/modsearch version` 可以查到当前版本号。本页的版本号由发布流程自动同步。这里继续使用 `add` 也是有意的，因为它会用上面点名的精确版本替换 profile 中记录的安装请求。不要换成 `update`，后者只在已记录的 semver 请求内更新，还会再次让 pnpm 经过发布时长过滤来选版本。
 
 这里点名版本号而不用 `@latest` 是有意的。pnpm 11 默认通过 `minimumReleaseAge` 扣住最近 24 小时内发布的版本，再让 dist-tag 在通过过滤的候选里解析。因此 `@latest` 会静默装到旧版本，而不是跳过冷静期。精确版本可以避开这次 dist-tag 解析。从 pnpm 11.1.3 开始，默认宽松模式会把尚未度过冷静期的精确版本写入该 profile 的 `pnpm-workspace.yaml`，放在 `minimumReleaseAgeExclude` 下，然后继续安装。其余包仍受发布时长窗口保护。
 

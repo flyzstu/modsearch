@@ -22,7 +22,7 @@ $ErrorActionPreference = 'Stop'
 # --- Version constants: stamped by scripts/release.mjs at release time. --------
 # Do not edit $Pinned by hand; scripts/stamp.test.mjs asserts it equals the
 # package.json version, and the release script rewrites it on every bump.
-$Package = '@liustack/modsearch'
+$Package = '@flyzstu/modsearch'
 $Bin = 'modsearch'
 $Pinned = '5.11.0'
 # -------------------------------------------------------------------------------

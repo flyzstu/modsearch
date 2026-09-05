@@ -19,7 +19,7 @@
 </p>
 
 <p align="center">
-  <a href="https://nodejs.org"><img src="https://img.shields.io/node/v/@liustack/modsearch?style=flat-square" alt="Node.js"></a>
+  <a href="https://nodejs.org"><img src="https://img.shields.io/node/v/@flyzstu/modsearch?style=flat-square" alt="Node.js"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue?style=flat-square" alt="License"></a>
   <img src="https://img.shields.io/badge/tests-532%20passed-brightgreen?style=flat-square" alt="Tests">
 </p>
@@ -42,7 +42,7 @@ Encounter a bug or want a new engine supported? Feel free to [open an issue](htt
 
 ## Features
 
-- **🥇 The strongest free web search plugin for DeepSeek Harness (dsh):** one command installs it, `npx -y @deepseek-ai/dsh plugin --profile web add @liustack/modsearch@5.11.0`. Details in [harness setup](docs/harness-setup.md#deepseek-harness-dsh).
+- **🥇 The strongest free web search plugin for DeepSeek Harness (dsh):** one command installs it, `npx -y @deepseek-ai/dsh plugin --profile web add @flyzstu/modsearch@5.11.0`. Details in [harness setup](docs/harness-setup.md#deepseek-harness-dsh).
 - **Free out of the box, no signup.** Search and page fetch run on Firecrawl Keyless by default: [1,000 free credits/month](https://www.firecrawl.dev/blog/firecrawl-keyless-launch), no account, no API key, no card. Every fallback channel is free too: Antigravity CLI needs only a browser sign-in, and AnySearch, Ollama Cloud, Brave, Tavily, Exa, and a free Firecrawl key each add their own quota with no card required.
 - **Automatic failover.** When a channel fails or exhausts its quota, the next one takes over.
 - **Per-engine key rotation.** Give AnySearch, Ollama, Brave, Tavily, Exa, or Firecrawl multiple comma-separated keys. Authentication, rate-limit, and quota failures rotate to the next key before the engine chain falls back.
@@ -105,7 +105,7 @@ Picked a key instead? Send one line to your AI: "set my anysearch key to ...", "
 
 dsh users have a path that never touches the command line. Settings → Plugins → Plugin config has a ModSearch card: pick the preferred engine, fill in an API key or a self-hosted endpoint, tick which engines join failover, hit save and it takes effect.
 
-![The ModSearch card in the dsh settings page, shown in Chinese: pick the preferred engine, fill in an API key and endpoint, tick the engines that join failover](https://raw.githubusercontent.com/liustack/modsearch/main/assets/demo-dsh-settings-card.jpg)
+![The ModSearch card in the dsh settings page, shown in Chinese: pick the preferred engine, fill in an API key and endpoint, tick the engines that join failover](https://raw.githubusercontent.com/flyzstu/modsearch/main/assets/demo-dsh-settings-card.jpg)
 
 ## Usage
 

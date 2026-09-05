@@ -73,7 +73,7 @@ export async function runFetch(options: FetchOptions): Promise<FetchResult> {
   const maxChars = options.maxChars ?? DEFAULT_MAX_CHARS;
   const maxRedirects = options.maxRedirects ?? DEFAULT_MAX_REDIRECTS;
   const allowPrivateNetwork = options.allowPrivateNetwork ?? false;
-  const userAgent = options.userAgent ?? 'modsearch (+https://github.com/liustack/modsearch)';
+  const userAgent = options.userAgent ?? 'modsearch (+https://github.com/flyzstu/modsearch)';
 
   if (!Number.isFinite(timeoutMs) || timeoutMs <= 0) {
     throw new Error('Invalid timeoutMs. Use a positive integer.');

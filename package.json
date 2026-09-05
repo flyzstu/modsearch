@@ -1,5 +1,5 @@
 {
-  "name": "@liustack/modsearch",
+  "name": "@flyzstu/modsearch",
   "version": "5.11.0",
   "description": "The strongest free web search plugin for coding agents. Plug-in web search, X search, and page fetch for models without native web access. Supports Firecrawl keyless, AnySearch (search, batch & extract), Antigravity CLI, Ollama Cloud (search & fetch), Brave Search, Tavily, Exa, and Grok.",
   "type": "module",
@@ -47,12 +47,12 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/liustack/modsearch.git"
+    "url": "git+https://github.com/flyzstu/modsearch.git"
   },
   "bugs": {
-    "url": "https://github.com/liustack/modsearch/issues"
+    "url": "https://github.com/flyzstu/modsearch/issues"
   },
-  "homepage": "https://github.com/liustack/modsearch#readme",
+  "homepage": "https://github.com/flyzstu/modsearch#readme",
   "engines": {
     "node": ">=22.13"
   },

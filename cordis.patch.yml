@@ -10,4 +10,4 @@
 
 - insert:
     - id: modsearch
-      name: '@liustack/modsearch'
+      name: '@flyzstu/modsearch'

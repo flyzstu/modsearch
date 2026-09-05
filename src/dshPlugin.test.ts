@@ -44,7 +44,7 @@ describe('dsh plugin bundle', () => {
     expect(pkg.files).toContain('dsh');
     expect(pkg.files).toContain('cordis.patch.yml');
     const patch = fs.readFileSync(new URL('../cordis.patch.yml', import.meta.url), 'utf-8');
-    expect(patch).toContain("name: '@liustack/modsearch'");
+    expect(patch).toContain("name: '@flyzstu/modsearch'");
     expect(patch).toContain('searchProvider: modsearch');
   });
 });

@@ -7,7 +7,7 @@ judgment on your work.
 
 What works instead:
 
-- **[Open an issue](https://github.com/liustack/modsearch/issues)** describing
+- **[Open an issue](https://github.com/flyzstu/modsearch/issues)** describing
   the bug or the idea. Issues get read and drive what gets built. If your
   branch demonstrates the fix, link it from the issue as a reference.
 - **Keep it in your fork.** MIT means your copy is fully yours.

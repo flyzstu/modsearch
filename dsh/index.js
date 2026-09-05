@@ -165,7 +165,7 @@ function registerXSearchTool(ctx) {
   ctx.tools.register({
     name: 'x_search',
     description:
-      'Search X (Twitter) posts through the modsearch bridge. Use for questions about posts, threads, accounts, or discussions on X: what someone posted, reactions to an event, sentiment in a community. Returns structured evidence with a summary, per-post items with URLs, and an uncertainty list. A degraded status means X itself was unreachable and a keyless web search answered second-hand. Run `npx @liustack/modsearch doctor` to inspect the resolved engines.',
+      'Search X (Twitter) posts through the modsearch bridge. Use for questions about posts, threads, accounts, or discussions on X: what someone posted, reactions to an event, sentiment in a community. Returns structured evidence with a summary, per-post items with URLs, and an uncertainty list. A degraded status means X itself was unreachable and a keyless web search answered second-hand. Run `npx @flyzstu/modsearch doctor` to inspect the resolved engines.',
     parameters: {
       type: 'object',
       properties: {
@@ -237,7 +237,7 @@ function registerReadPageTool(ctx) {
   ctx.tools.register({
     name: 'read_page',
     description:
-      'Read one web page through the modsearch bridge. Use when a message references a specific http(s) URL whose content matters: docs, an article, a changelog, a thread. Returns structured evidence with a summary, the extracted content, outgoing links, uncertainty, and operational warnings such as cloud fetching. Pass "query" to focus the reading on one question. Page reading needs no engine setup. Run `npx @liustack/modsearch doctor` to inspect the resolved route.',
+      'Read one web page through the modsearch bridge. Use when a message references a specific http(s) URL whose content matters: docs, an article, a changelog, a thread. Returns structured evidence with a summary, the extracted content, outgoing links, uncertainty, and operational warnings such as cloud fetching. Pass "query" to focus the reading on one question. Page reading needs no engine setup. Run `npx @flyzstu/modsearch doctor` to inspect the resolved route.',
     parameters: {
       type: 'object',
       properties: {
@@ -758,7 +758,7 @@ async function runCli(args, signal) {
       .join('; ');
     throw new Error(
       `modsearch could not reach the requested source${attempts ? ` (${attempts})` : ''}. ` +
-        'Run `npx @liustack/modsearch doctor` in a terminal to check the engine setup.',
+        'Run `npx @flyzstu/modsearch doctor` in a terminal to check the engine setup.',
     );
   }
   return entry;

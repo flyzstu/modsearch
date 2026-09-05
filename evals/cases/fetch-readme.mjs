@@ -5,7 +5,7 @@ export default {
   id: 'fetch-readme',
   title: 'Single-page fetch: the project README reads back with content',
   requirement: 'fetch',
-  args: ['-e', 'local', '-u', 'https://raw.githubusercontent.com/liustack/modsearch/main/README.md'],
+  args: ['-e', 'local', '-u', 'https://raw.githubusercontent.com/flyzstu/modsearch/main/README.md'],
   expectation: 'content is non-empty and mentions "ModSearch".',
   check(result) {
     const entry = result.results?.[0] ?? {};

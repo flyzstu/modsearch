@@ -18,7 +18,7 @@ dsh is different from the other harnesses: modsearch plugs in natively, not as a
 For plugin switches, profile patches, runtime verification, updating, and compatibility checks, use the dedicated [dsh plugin guide](dsh.md).
 
 ```sh
-npx -y @deepseek-ai/dsh plugin --profile web add @liustack/modsearch@5.11.0
+npx -y @deepseek-ai/dsh plugin --profile web add @flyzstu/modsearch@5.11.0
 ```
 
 Three things land at once:
@@ -36,10 +36,10 @@ The plugin also works when dsh runs inside an Electron desktop host. Electron ex
 To install the current release or refresh an existing profile, rerun `add` with the version named:
 
 ```sh
-npx -y @deepseek-ai/dsh plugin --profile <name> add @liustack/modsearch@5.11.0
+npx -y @deepseek-ai/dsh plugin --profile <name> add @flyzstu/modsearch@5.11.0
 ```
 
-`npm view @liustack/modsearch version` prints the current version. This page is stamped with the package version by the release process. Reusing `add` is deliberate because it replaces the profile's recorded request with the exact version named above. Do not substitute `update`, which stays inside the recorded semver request and lets pnpm select through its release-age filter again.
+`npm view @flyzstu/modsearch version` prints the current version. This page is stamped with the package version by the release process. Reusing `add` is deliberate because it replaces the profile's recorded request with the exact version named above. Do not substitute `update`, which stays inside the recorded semver request and lets pnpm select through its release-age filter again.
 
 The named version rather than `@latest` is deliberate. pnpm 11 holds back releases published in the last 24 hours through `minimumReleaseAge`, which is enabled by default, then resolves the dist-tag against the versions that survive the filter. As a result, `@latest` silently installs an older release instead of skipping the gate. An exact version avoids that dist-tag resolution. Since pnpm 11.1.3, the default loose mode records an immature exact pick under `minimumReleaseAgeExclude` in the profile's `pnpm-workspace.yaml` and continues, while leaving the release-age window in place for everything else.
 

@@ -169,4 +169,4 @@ Each engine's own failure is listed in order. Act on the first fixable one, usua
 
 ## Still stuck
 
-Re-run with the failing command exactly as modsearch printed it, and include that output in an issue: https://github.com/liustack/modsearch/issues
+Re-run with the failing command exactly as modsearch printed it, and include that output in an issue: https://github.com/flyzstu/modsearch/issues

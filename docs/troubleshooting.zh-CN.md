@@ -169,4 +169,4 @@ Every engine for the web source failed.
 
 ## 还是没辙
 
-用 modsearch 打印的失败命令原样重跑一遍，把那份输出附在 issue 里：https://github.com/liustack/modsearch/issues
+用 modsearch 打印的失败命令原样重跑一遍，把那份输出附在 issue 里：https://github.com/flyzstu/modsearch/issues

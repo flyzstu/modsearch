@@ -7,7 +7,7 @@ skill 如何启动 `modsearch` CLI、钉在哪个版本、在什么都跑不了�
 ## 钉住的版本
 
 - 钉住的 CLI 版本：5.4.0
-- npm 包：`@liustack/modsearch`
+- npm 包：`@flyzstu/modsearch`
 - CLI 命令名：`modsearch`
 
 上面这行版本号和两个启动器内部的常量由 `scripts/release.mjs` 在发布时从 `package.json` 盖章写入，不要手改。三份副本与 `package.json` 一旦不一致，`scripts/stamp.test.mjs` 会让构建失败。
@@ -17,8 +17,8 @@ skill 如何启动 `modsearch` CLI、钉在哪个版本、在什么都跑不了�
 每次调用按这个顺序找一条能跑 CLI 的路：
 
 1. **`PATH` 上已有兼容的 `modsearch`**，按名字直接跑。
-2. **有 `npx`，且 `node` 满足 CLI 的 22.13 下限**，跑 `npx --yes --package @liustack/modsearch@<钉住版本> modsearch <args>`。骑在老 node 上的 npx 会被跳过：那条路已知会在运行时失败。
-3. **有 `bunx`**，跑 `bunx --bun @liustack/modsearch@<钉住版本> <args>`。
+2. **有 `npx`，且 `node` 满足 CLI 的 22.13 下限**，跑 `npx --yes --package @flyzstu/modsearch@<钉住版本> modsearch <args>`。骑在老 node 上的 npx 会被跳过：那条路已知会在运行时失败。
+3. **有 `bunx`**，跑 `bunx --bun @flyzstu/modsearch@<钉住版本> <args>`。
 4. **原生产物**，留给 B 阶段。目前没有发布任何产物，这个分支报告 `nativeArtifact.available: false` 后继续往下走。
 5. **什么都没有**，打印结构化诊断并以 `78`（`EX_CONFIG`）退出。
 
@@ -32,9 +32,9 @@ skill 如何启动 `modsearch` CLI、钉在哪个版本、在什么都跑不了�
 
 A 阶段不发原生产物。`npx` 和 `bunx` 路径首次使用时拉取钉住的 npm 包并缓存（这就是这两个运行器的工作方式），除此之外不下载任何东西。B 阶段原生产物落地后，启动器会按用户、按版本缓存它们，并用绝对路径启动：
 
-- macOS：`~/Library/Caches/liustack/modsearch/<version>/`
-- Linux：`${XDG_CACHE_HOME:-$HOME/.cache}/liustack/modsearch/<version>/`
-- Windows：`%LOCALAPPDATA%\liustack\modsearch\<version>\`
+- macOS：`~/Library/Caches/flyzstu/modsearch/<version>/`
+- Linux：`${XDG_CACHE_HOME:-$HOME/.cache}/flyzstu/modsearch/<version>/`
+- Windows：`%LOCALAPPDATA%\flyzstu\modsearch\<version>\`
 
 约束是：不用 `sudo` 或管理员权限，不碰系统目录，不改 `PATH`，先下载到临时文件、校验 SHA-256 后原子移动，失败时不留任何未校验的可执行文件。下载一律用 `curl`（Windows 上写全 `curl.exe`），它不会打隔离标记（Mark-of-the-Web），启动器也从不摘除浏览器本会设置的安全标记。
 

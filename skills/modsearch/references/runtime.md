@@ -11,7 +11,7 @@ shell syntax.
 ## Pinned version
 
 - Pinned CLI version: 5.11.0
-- npm package: `@liustack/modsearch`
+- npm package: `@flyzstu/modsearch`
 - CLI binary name: `modsearch`
 
 The pinned version line above and the constants inside both launchers are
@@ -24,8 +24,8 @@ launcher/reference copies ever drift from `package.json`.
 Each call resolves a way to run the CLI, in this order:
 
 1. **A compatible `modsearch` already on `PATH`** — run it directly, by name.
-2. **`npx` present, and `node` meets the CLI's 22.13 floor** — `npx --yes --package @liustack/modsearch@<pinned> modsearch <args>`. An npx sitting on an older node is skipped: it would select a path known to fail at run time.
-3. **`bunx` present** — `bunx --bun @liustack/modsearch@<pinned> <args>`.
+2. **`npx` present, and `node` meets the CLI's 22.13 floor** — `npx --yes --package @flyzstu/modsearch@<pinned> modsearch <args>`. An npx sitting on an older node is skipped: it would select a path known to fail at run time.
+3. **`bunx` present** — `bunx --bun @flyzstu/modsearch@<pinned> <args>`.
 4. **A native artifact** — reserved for phase B. None is published yet, so this
    branch reports `nativeArtifact.available: false` and moves on.
 5. **Nothing usable** — print a structured diagnosis and exit `78` (`EX_CONFIG`).
@@ -51,9 +51,9 @@ else is ever downloaded. When native artifacts land in phase B, the
 launchers will cache them per user, keyed by version, and launch them by
 absolute path:
 
-- macOS: `~/Library/Caches/liustack/modsearch/<version>/`
-- Linux: `${XDG_CACHE_HOME:-$HOME/.cache}/liustack/modsearch/<version>/`
-- Windows: `%LOCALAPPDATA%\liustack\modsearch\<version>\`
+- macOS: `~/Library/Caches/flyzstu/modsearch/<version>/`
+- Linux: `${XDG_CACHE_HOME:-$HOME/.cache}/flyzstu/modsearch/<version>/`
+- Windows: `%LOCALAPPDATA%\flyzstu\modsearch\<version>\`
 
 With these constraints: no `sudo` or admin rights, no system directories, no
 `PATH` edits, download to a temp file and verify SHA-256 before an atomic move,

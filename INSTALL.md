@@ -90,7 +90,7 @@ refreshes the skill.
 `skills` is a third-party CLI for installing agent skills. It is not required.
 
 ```bash
-npx -y skills add liustack/modsearch
+npx -y skills add flyzstu/modsearch
 ```
 
 **If it fails** (the command is unavailable, or it does not place the folder under
