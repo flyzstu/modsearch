@@ -1,5 +1,10 @@
 # Changelog
 
+## 5.11.1 - 2026-09-05
+
+- The npm scope moves from `@liustack/modsearch` to `@flyzstu/modsearch`: package.json, the dsh plugin id, skill launchers, and install docs all point at the fork, so the market shows the fork name instead of the upstream one.
+- Git installs now build `dist/` via a `prepare` script, so `github:flyzstu/modsearch` lands runnable without a separate build step.
+
 ## 5.11.0 - 2026-09-05
 
 - Brave Search and Ollama join the engine chain. Brave Search authenticates with `X-Subscription-Token`, classifies rate-limit/quota/422 errors for failover, and reads `BRAVE_API_KEY`. Ollama covers web search (`/api/web_search`) and web fetch (`/api/web_fetch`) behind Bearer auth with the local SSRF private-network guard. Both support multi-key rotation with cooldown failover, doctor diagnostics, and the dsh settings card.
