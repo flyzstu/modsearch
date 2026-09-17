@@ -319,9 +319,14 @@ function house() {
   const routes: Record<string, RouteHandler> = {};
   const namespaces: Namespace[] = [];
   const injected: string[][] = [];
+  // Services a test may hand the host before calling the route. The plugin asks
+  // for the optional connection service the way a real context answers: a
+  // lookup that yields undefined wherever this dsh serves none.
+  const services: Record<string, unknown> = {};
   const ctx = {
     tools: { register: () => {} },
     web: { registerSearchProvider: () => {} },
+    get: (name: string) => services[name],
     inject: (deps: string[], run: (scope: unknown) => void) => {
       injected.push(deps);
       if (deps.includes('webServer')) {
@@ -345,7 +350,7 @@ function house() {
       }
     },
   };
-  return { routes, namespaces, injected, ctx };
+  return { routes, namespaces, injected, services, ctx };
 }
 
 async function callRoute(
@@ -703,6 +708,66 @@ describe('dsh settings card route', () => {
         headers: { host: '127.0.0.1:3080', 'sec-fetch-site': 'cross-site' },
       });
       expect(status).toBe(403);
+    });
+  });
+
+  it('takes the connection service verdict, so a declared authority the copied rule refused works', async () => {
+    // The card has to survive wherever dsh itself is reachable. dsh's own fence
+    // trusts the authorities a deployment serves (a LAN IP, a declared host),
+    // and this route's copied loopback rule was the one thing that did not.
+    await withConfig({ engine: 'tavily', engines: {} }, async (handler, _file, stage) => {
+      const seenHosts: string[] = [];
+      stage.services.connection = {
+        requestRejection: (req: { headers: Record<string, string> }) => {
+          seenHosts.push(req.headers.host);
+          return undefined;
+        },
+      };
+      const { status } = await callRoute(handler, {
+        method: 'GET',
+        url: '/modsearch/config',
+        headers: { host: 'harness.example' },
+      });
+      expect(status).toBe(200);
+      expect(seenHosts).toEqual(['harness.example']);
+    });
+  });
+
+  it('refuses what dsh refuses, even where the copied loopback rule would have written', async () => {
+    await withConfig({ engine: 'tavily' }, async (handler, file, stage) => {
+      stage.services.connection = { requestRejection: () => 403 };
+      const before = fs.readFileSync(file, 'utf-8');
+      const { status } = await callRoute(handler, postOf({ engine: 'exa' }));
+      expect(status).toBe(403);
+      expect(fs.readFileSync(file, 'utf-8')).toBe(before);
+    });
+  });
+
+  it('answers 401 when the browser session dsh requires was not presented', async () => {
+    await withConfig({ engine: 'tavily' }, async (handler, file, stage) => {
+      stage.services.connection = { requestRejection: () => 401 };
+      const before = fs.readFileSync(file, 'utf-8');
+      const { status, body } = await callRoute(handler, {
+        method: 'GET',
+        url: '/modsearch/config',
+      });
+      expect(status).toBe(401);
+      expect(String(body.error)).toContain('session');
+      expect(fs.readFileSync(file, 'utf-8')).toBe(before);
+    });
+  });
+
+  it('keeps the local fence when the service offers no verdict to give', async () => {
+    await withConfig({ engine: 'tavily', engines: {} }, async (handler, _file, stage) => {
+      stage.services.connection = {};
+      const local = await callRoute(handler, { method: 'GET', url: '/modsearch/config' });
+      expect(local.status).toBe(200);
+      const forged = await callRoute(handler, {
+        method: 'GET',
+        url: '/modsearch/config',
+        headers: { host: 'harness.example' },
+      });
+      expect(forged.status).toBe(403);
     });
   });
 

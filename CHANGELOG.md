@@ -1,5 +1,9 @@
 # Changelog
 
+## 5.11.2 - 2026-09-17
+
+- The settings card works wherever dsh itself is reachable, not only over loopback. The `/modsearch/config` route carried a copy of dsh's `/api` fence from the release where that fence trusted loopback alone; dsh has since let a deployment name the authorities it serves (`client-connection.trustedHosts`, plus the LAN IP literals an all-interface bind derives) and put a browser-session check in front of every surface. The copy never followed, so a profile reached by LAN IP or by a domain worked everywhere except this card, which answered `request refused: this route answers same-origin loopback only` while the rest of the UI kept working. The route now asks dsh's own `connection` service for its verdict — the same call dsh's gateway and open-in-app routes make — which trusts the authorities the deployment trusts and requires the browser session the card already has, and keeps the copied loopback-only fence as the fallback for a dsh that serves no such service. A `401` now names the missing browser session, and the `403` no longer claims the route is loopback-only. Tests cover an authority the old rule refused, a refusal arriving where the old rule would have written, the `401`, and the service-less fallback.
+
 ## 5.11.1 - 2026-09-05
 
 - The npm scope moves from `@liustack/modsearch` to `@flyzstu/modsearch`: package.json, the dsh plugin id, skill launchers, and install docs all point at the fork, so the market shows the fork name instead of the upstream one.

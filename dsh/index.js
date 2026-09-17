@@ -76,8 +76,8 @@ export function apply(ctx, config = {}) {
   }
   // The settings card. dsh web users have no terminal, so `modsearch config
   // set` is out of reach there and an engine key had no way in. The card the
-  // browser half (dsh/client.js) contributes talks to the loopback route
-  // below rather than to a settings schema, because the values live in
+  // browser half (dsh/client.js) contributes talks to the route below rather
+  // than to a settings schema, because the values live in
   // ~/.modsearch/config.json, shared with the CLI and every other harness.
   //
   // webServer exists only under the web profile, and this cordis has no
@@ -87,7 +87,7 @@ export function apply(ctx, config = {}) {
   if (config.settingsCard !== false && typeof ctx.inject === 'function') {
     ctx.inject(['webServer'], (scope) => {
       try {
-        registerConfigRoute(scope);
+        registerConfigRoute(scope, ctx);
       } catch (error) {
         console.error(`[modsearch] settings card route skipped: ${error}`);
       }
@@ -1293,13 +1293,12 @@ function isLoopbackHost(hostname) {
 }
 
 /**
- * The same fence dsh puts in front of its own /api, for the same two
- * confused-deputy paths. Host is the header DNS rebinding cannot forge, so it
- * must name a loopback authority: a rebound page reaches this socket carrying
- * its own domain there. Origin and Sec-Fetch-Site then rule out a cross-site
- * page on the machine itself. A read is refused the same way as a write,
- * though it carries no key: nothing about editing engine settings wants a
- * wider door.
+ * The fence for the same two confused-deputy paths, copied from dsh's /api
+ * fence as it stood when this route shipped: Host is the header DNS rebinding
+ * cannot forge, so it must name a loopback authority; Origin and Sec-Fetch-Site
+ * then rule out a cross-site page on the machine itself. A read is refused the
+ * same way as a write, though it carries no key. Kept as the fallback for a dsh
+ * that serves no connection service.
  */
 function isTrustedRequest(req) {
   const host = req.headers?.host;
@@ -1329,9 +1328,31 @@ function isTrustedRequest(req) {
   }
 }
 
+/**
+ * dsh's own verdict on this request, when this dsh serves one. The connection
+ * service applies the fence in front of dsh's /api and its other plugin routes:
+ * a loopback authority, or any authority the deployment trusts
+ * (`client-connection.trustedHosts`, plus the LAN IP literals an all-interface
+ * bind derives), same-origin markers, and then the browser session every other
+ * surface requires. Reusing it is what keeps this card usable wherever dsh
+ * itself is reachable: the copied loopback-only rule locked the card out of a
+ * non-loopback deployment while the rest of the UI kept working.
+ * @param req - the incoming request.
+ * @param ctx - the plugin context, asked for the optional connection service.
+ * @returns dsh's status (401 no browser session, 403 untrusted request), 403
+ * from the local fence, or undefined to accept.
+ */
+function requestRejection(req, ctx) {
+  const connection = typeof ctx?.get === 'function' ? ctx.get('connection') : undefined;
+  if (connection !== undefined && typeof connection.requestRejection === 'function') {
+    return connection.requestRejection(req);
+  }
+  return isTrustedRequest(req) ? undefined : 403;
+}
+
 /** GET /modsearch/config: the summary above. POST: one card submission. */
-function registerConfigRoute(ctx) {
-  ctx.webServer.register({
+function registerConfigRoute(scope, ctx) {
+  scope.webServer.register({
     name: 'modsearch-config',
     kind: 'exact',
     path: '/modsearch/config',
@@ -1340,8 +1361,14 @@ function registerConfigRoute(ctx) {
         res.writeHead(status, { 'content-type': 'application/json' });
         res.end(JSON.stringify(body));
       };
-      if (!isTrustedRequest(req)) {
-        send(403, { error: 'request refused: this route answers same-origin loopback only' });
+      const rejection = requestRejection(req, ctx);
+      if (rejection !== undefined) {
+        send(rejection, {
+          error:
+            rejection === 401
+              ? 'request refused: this route needs the dsh browser session; open the dsh UI at its own address and retry'
+              : 'request refused: this dsh deployment does not serve this authority, or the request is not same-origin',
+        });
         return;
       }
       if (req.method === 'GET') {
