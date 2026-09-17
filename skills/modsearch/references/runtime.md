@@ -10,7 +10,7 @@ shell syntax.
 
 ## Pinned version
 
-- Pinned CLI version: 5.11.1
+- Pinned CLI version: 5.11.2
 - npm package: `@flyzstu/modsearch`
 - CLI binary name: `modsearch`
 

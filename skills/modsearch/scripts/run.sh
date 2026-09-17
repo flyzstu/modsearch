@@ -22,7 +22,7 @@ set -eu
 # package.json version, and the release script rewrites it on every bump.
 PKG="@flyzstu/modsearch"
 BIN="modsearch"
-PINNED="5.11.1"
+PINNED="5.11.2"
 # -------------------------------------------------------------------------------
 
 NATIVE_NOTE="no native artifact is published for this tool yet; phase A ships npm launch paths only"
